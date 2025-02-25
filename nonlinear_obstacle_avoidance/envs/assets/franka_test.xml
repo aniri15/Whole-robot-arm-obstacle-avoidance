@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco>
+    <include file="franka/franka_assets.xml"/>
+
+    <compiler inertiafromgeom='auto' angle="radian" meshdir="franka/meshes" autolimits="true"/>
+
+	<option timestep="0.002">
+		<flag warmstart="enable"/>
+	</option>
+
+	<visual>
+		<global offwidth="2560" offheight="1920" />
+    </visual>
+
+    <asset>
+        <texture name="wood1" file="franka/textures/wood1.png" type="cube"/>
+            <material shininess=".1" name="wood1" texture="wood1" specular="0.4"/>
+		<texture name="light_wood_v2" file="franka/textures/light_wood_v2.png" type="cube"/>
+        	<material shininess=".1" name="light_wood_v2" texture="light_wood_v2" specular="0.4"/>
+        <texture type="skybox" builtin="gradient" rgb1="0.0 0.0 0.0" rgb2="0.4 0.6 0.8" width="32" height="32"/>
+        <material name="floor_mat" specular="0" shininess="0.5" reflectance="0" rgba="0.2 0.2 0.2 1"/>
+        <material name="table_mat" specular="0" shininess="0.5" reflectance="0" rgba="0.93 0.93 0.93 1"/>
+        <material name="block_mat" specular="0" shininess="0.5" reflectance="0" rgba="0.2 0.2 0.2 1"/>
+    </asset>
+
+    <worldbody>
+        <include file="franka/chain.xml"/>
+
+        <geom name="floor0" pos="1.05 0.75 0" size="1 0.70 1" type="plane" condim="3" material="floor_mat"/>
+
+    <!-- Robot -->
+        <body name="panda_table" pos="0.5 0.75 0.2">
+			<geom name="panda_table" type='box' size='0.12 0.2 0.2' pos='0.25 0 0' material="table_mat"/>
+			<body name="panda_base" pos="0.3 0 0.2"/>
+		</body>
+
+	<!--Human shaped robot-->
+		<body name="human" pos="1.6 0.75 -0.13" quat="0.707 0 0 0.707">
+		<!-- Head -->
+		<body name="head" pos="0 0 1.45">
+			<geom type="ellipsoid" size="0.1 0.125 0.15" rgba="1 0 0 1"/>
+		</body>
+
+		<!-- Neck -->
+		<body name="neck" pos="0 0 1.25">
+			<geom type="box" size="0.06 0.075 0.2" rgba="0 1 0 1"/>
+		</body>
+
+		<!-- Body -->
+		<body name="body" pos="0 0 1.0">
+			<geom type="box" size="0.15 0.2 0.25" rgba="0 1 0 1"/>
+		</body>
+
+		<!-- Left Arm -->
+		<body name="upper_left_arm" pos="-0.2 0 1.125" quat="0.707 0 0 0.707">
+			<geom type="ellipsoid" size="0.09 0.09 0.25" rgba="0 0 1 1"/>
+		</body>
+		<body name="lower_left_arm" pos="-0.2 0 0.875">
+			<geom type="ellipsoid" size="0.07 0.07 0.2" rgba="0 0 1 1"/>
+		</body>
+
+		<!-- Right Arm -->
+		<body name="upper_right_arm" pos="0.2 0 1.125" quat="0.707 0 0 0.707">
+			<geom type="ellipsoid" size="0.09 0.09 0.25" rgba="0 0 1 1"/>
+		</body>
+		<body name="lower_right_arm" pos="0.2 0 0.875">
+			<geom type="ellipsoid" size="0.07 0.07 0.2" rgba="0 0 1 1"/>
+		</body>
+
+		<!-- Left Leg -->
+		<body name="left_leg" pos="-0.1 0 0.6">
+			<geom type="ellipsoid" size="0.125 0.1 0.5" rgba="0.5 0.5 0.5 1"/>
+		</body>
+
+		<!-- Right Leg -->
+		<body name="right_leg" pos="0.1 0 0.6">
+			<geom type="ellipsoid" size="0.125 0.1 0.5" rgba="0.5 0.5 0.5 1"/>
+		</body>
+		</body>
+
+
+
+		<!-- Target Position Pointer -->
+		<site name="target_pos" pos="0.5 0.2 0.6" size="0.005 0.005 0.005" rgba="0 0 0 1" type="sphere"/>
+
+
+
+		<light directional="true" ambient="0.2 0.2 0.2" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3" castshadow="false" pos="0 0 4" dir="0 0 -1"/>
+
+    </worldbody>
+
+    <include file="/franka/actuator.xml"/>
+
+</mujoco>

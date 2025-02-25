@@ -1,0 +1,60 @@
+<mujoco model="rand_dyn_obst">
+    <compiler inertiafromgeom='auto' angle="radian" meshdir="franka/meshes" autolimits="true"/>
+
+	<option timestep="0.002">
+		<flag warmstart="enable"/>
+	</option>
+
+	<visual>
+		<global offwidth="2560" offheight="1920" />
+    </visual>
+
+	<asset>
+		<texture name="wood1" file="franka/textures/wood1.png" type="cube"/>
+            <material shininess=".1" name="wood1" texture="wood1" specular="0.4"/>
+		<texture name="light_wood_v2" file="franka/textures/light_wood_v2.png" type="cube"/>
+        	<material shininess=".1" name="light_wood_v2" texture="light_wood_v2" specular="0.4"/>
+        <texture type="skybox" builtin="gradient" rgb1="0.0 0.0 0.0" rgb2="0.4 0.6 0.8" width="32" height="32"/>
+        <material name="floor_mat" specular="0" shininess="0.5" reflectance="0" rgba="0.2 0.2 0.2 1"/>
+        <material name="table_mat" specular="0" shininess="0.5" reflectance="0" rgba="0.93 0.93 0.93 1"/>
+        <material name="block_mat" specular="0" shininess="0.5" reflectance="0" rgba="0.2 0.2 0.2 1"/>
+    </asset>
+
+    <include file="franka/franka_assets.xml"/>
+
+    <worldbody>
+
+        <geom name="floor0" pos="1.05 0.75 0" size="1 0.70 1" type="plane" condim="3" material="floor_mat"/>
+
+
+		<include file="franka/chain.xml"/>
+
+        <!-- Robot -->
+        <body name="panda_table" pos="0.5 0.75 0.2">
+			<geom name="panda_table" type='box' size='0.12 0.2 0.2' pos='0.25 0 0' material="table_mat"/>
+			<body name="panda_base" pos="0.3 0 0.2"/>
+		</body>
+
+		<!-- Workspace: Object, Target and Obstacles may only be spawned inside this area -->
+		<site name="workspace" pos='1.3 0.75 0.5' size="0.2 0.48 0.1" rgba="1 1 1 0.05" type="box"/>
+
+		<!-- Target -->
+		<site name="target0" pos="1.3 0.75 0.45" size="0.02 0.02 0.02" rgba="1 0 0 1" type="sphere"/>
+
+		<!-- Object -->
+		<body name="object0" pos="0.025 0.025 0.025">
+			<joint name="object0:joint" type="free" damping="0.01"/>
+			<geom name="object0" size="0.02 0.02 0.02" type="box" condim="4" material="block_mat" mass="0.01"/>
+			<site name="object0" pos="0 0 0" size="0.01 0.01 0.01" rgba="0 0 0 1" type="sphere"/>
+		</body>
+
+
+		<!-- Target Position Pointer -->
+		<site name="target_pos" pos="0.01 0.01 0.01" size="0.005 0.005 0.005" rgba="0 0 0 1" type="sphere"/>
+
+
+    </worldbody>
+
+	<include file="franka/actuator.xml"/>
+
+</mujoco>

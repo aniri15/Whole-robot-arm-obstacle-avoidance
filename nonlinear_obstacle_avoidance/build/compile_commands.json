@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/aniri/nonlinear_obstacle_avoidance/build",
+  "command": "/usr/bin/c++    -g   -std=gnu++2a -o CMakeFiles/ik-algorithms-example.dir/main.cpp.o -c /home/aniri/nonlinear_obstacle_avoidance/inverse-kinematics-algorithms/example/main.cpp",
+  "file": "/home/aniri/nonlinear_obstacle_avoidance/inverse-kinematics-algorithms/example/main.cpp"
+}
+]
