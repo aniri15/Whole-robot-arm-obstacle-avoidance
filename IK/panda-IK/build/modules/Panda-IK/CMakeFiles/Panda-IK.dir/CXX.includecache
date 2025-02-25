@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/aniri/nonlinear_obstacle_avoidance/panda-IK/modules/Panda-IK/include/franka_ik_He.hpp
+array
+-
+cmath
+-
+eigen3/Eigen/Dense
+-
+
+/home/aniri/nonlinear_obstacle_avoidance/panda-IK/modules/Panda-IK/include/panda_ik.hpp
+iostream
+-
+franka_ik_He.hpp
+/home/aniri/nonlinear_obstacle_avoidance/panda-IK/modules/Panda-IK/include/franka_ik_He.hpp
+array
+-
+cmath
+-
+eigen3/Eigen/Dense
+-
+
+/home/aniri/nonlinear_obstacle_avoidance/panda-IK/modules/Panda-IK/source/panda_ik.cpp
+../include/panda_ik.hpp
+/home/aniri/nonlinear_obstacle_avoidance/panda-IK/modules/Panda-IK/include/panda_ik.hpp
+

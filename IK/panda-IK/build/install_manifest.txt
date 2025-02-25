@@ -1,0 +1,4 @@
+/usr/local/diana/lib/libPanda-IK.so
+/usr/local/diana/include/panda_ik.hpp
+/usr/local/diana/include/franka_ik_He.hpp
+/usr/local/diana/cfg/Panda-IK/config.toml

@@ -1,0 +1,1 @@
+/usr/bin/g++ -fPIC  -Wall -Wextra -Wfatal-errors -pthread  -shared -Wl,-soname,libPanda-IK.so -o libPanda-IK.so CMakeFiles/Panda-IK.dir/source/panda_ik.cpp.o   -L/usr/local/diana/lib  -Wl,-rpath,:::::::::::::::::::: 
