@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from envs.franka_human_env import FrankaHumanEnv
 from franka_human_avoider import MayaviAnimator
 import cv2
+import os
 
 
 
@@ -17,7 +18,10 @@ global rot_ctrl
 
 
 # initializations
-scene_path = "/home/aniri/nonlinear_obstacle_avoidance/franka_gym_test/envs2/franka_emika_panda/scene2.xml"
+folder_path = os.path.dirname(os.path.abspath(__file__))
+scene_path = folder_path + "/envs2/franka_emika_panda/scene2.xml"
+print("scene_path: ", scene_path)
+#scene_path = "/home/aniri/nonlinear_obstacle_avoidance/franka_gym_test/envs2/franka_emika_panda/scene2.xml"
 # good example
 # goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.5] good comparision
 # goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.5] unreachable for norm dir
@@ -25,8 +29,8 @@ goal = np.array([0.3, 0.2, 0.3])
 goal = np.array([0.5, 0.4, 0.4]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.5] with the obstacle moving achievable, without the obstacle moving unreachable???
 env = FrankaHumanEnv(scene_path,dynamic_human=True, goal=goal) 
 norm_dir = 1
-#norm_dir = 0
-norm_dir = 2
+norm_dir = 0
+#norm_dir = 2
 #norm_sensor = np.abs(1-norm_dir)
 #norm_sensor = True
 
@@ -53,6 +57,7 @@ elif norm_dir == 2:
     print("singular config number", env.singularities_number)
     print('------------------------------------')
     print("start replay")
+    #print("velocity average: ", np.mean(env.vel_storage, axis=0))
     env.replay()
 
 elif norm_dir == 0:
