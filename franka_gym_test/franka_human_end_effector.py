@@ -1,10 +1,8 @@
 from __future__ import annotations  # To be removed in future python versions
 
 import numpy as np
-import matplotlib.pyplot as plt
 from envs.franka_human_env import FrankaHumanEnv
-from franka_human_avoider import MayaviAnimator
-import cv2
+
 
 
 

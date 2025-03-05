@@ -29,11 +29,11 @@ from dynamic_obstacle_avoidance.obstacles import CuboidXd as Cuboid
 from dynamic_obstacle_avoidance.obstacles import EllipseWithAxes as Ellipse
 
 from nonlinear_avoidance.multi_body_franka_obs import create_3d_franka_obs
-from nonlinear_avoidance.multi_obs_env import create_3d_human
+from nonlinear_avoidance.multi_obs_env import create_3d_human, transform_from_multibodyobstacle_to_multiobstacle
 #from nonlinear_avoidance.multi_obs_env import create_3d_franka_obs2
-from nonlinear_avoidance.multi_body_franka_obs import (
-    transform_from_multibodyobstacle_to_multiobstacle,
-)
+# from nonlinear_avoidance.multi_body_franka_obs import (
+#     transform_from_multibodyobstacle_to_multiobstacle,
+# )
 from nonlinear_avoidance.multi_obstacle_avoider import MultiObstacleAvoider
 from nonlinear_avoidance.multi_obstacle_avoider import MultiObstacleContainer
 from nonlinear_avoidance.dynamics.spiral_dynamics import SpiralingDynamics3D
@@ -74,7 +74,8 @@ class MayaviAnimator:
         self, it_max: int = 300, delta_time: float = 0.005, filename: str = "animation", 
         current_position: np.ndarray = np.zeros(3),
         attractor_position: np.ndarray = np.zeros(3),
-        dynamic_human = False) -> None:
+        dynamic_human = False,
+        obstacle = True) -> None:
         self.it_max = it_max
         self.delta_time = delta_time
 
@@ -92,6 +93,7 @@ class MayaviAnimator:
         self.current_position = current_position
         self.attractor_position = attractor_position
         self.dynamic_human = dynamic_human  # the obstacle is dynamic
+        self.obstacle = obstacle # the obstacle is existent
 
     def run_norm(self,ii):    
         self.update_ee_step(ii)
@@ -107,13 +109,14 @@ class MayaviAnimator:
         return velocities
 
     def obstacle_initiation(self):
-        # step1 create tree of obstacles
-        self.human_obstacle_3d = create_3d_human()
+        if self.obstacle:
+            # step1 create tree of obstacles
+            self.human_obstacle_3d = create_3d_human()
 
-        # step2 transform tree of obstacles to multiobstacle????
-        transformed_human = transform_from_multibodyobstacle_to_multiobstacle(
-            self.human_obstacle_3d
-        )
+            # step2 transform tree of obstacles to multiobstacle????
+            transformed_human = transform_from_multibodyobstacle_to_multiobstacle(
+                self.human_obstacle_3d
+            )
 
         # step3 create container of obstacles
         self.container = MultiObstacleContainer()
@@ -164,18 +167,18 @@ class MayaviAnimator:
         
 
 #-----------------------main steps -------------------------------------------------------------------
-        # step1 create tree of obstacles
-        self.human_obstacle_3d = create_3d_human()
+        if self.obstacle:
+            # step1 create tree of obstacles
+            self.human_obstacle_3d = create_3d_human()
+
+            # step2 transform tree of obstacles to multiobstacle????
+            transformed_human = transform_from_multibodyobstacle_to_multiobstacle(
+                self.human_obstacle_3d
+            )
+
         #self.human_obstacle_3d = create_3d_franka_obs2()
         dynamics = LinearSystem(attractor_position=self.attractor_position)
         
-
-
-        # step2 transform tree of obstacles to multiobstacle????
-        transformed_human = transform_from_multibodyobstacle_to_multiobstacle(
-            self.human_obstacle_3d
-        )
-
         # step3 create container of obstacles
         self.container = MultiObstacleContainer()
         if self.dynamic_human:
@@ -260,8 +263,22 @@ class MayaviAnimator:
     def update_step(self, ii: int) -> None:
         # from mayavi import mlab
         velocities = np.zeros((self.n_traj, 3))
+        self.weight_ee = []
         for it_traj in range(self.n_traj):
             velocities[it_traj] = self.avoider.evaluate_sequence(self.trajectories[:, ii, it_traj])
+
+            if self.dynamic_human:
+                weights_ee = self.avoider.get_final_weights_for_sensors()
+                weights_length = len(self.container.get_tree(0))+1
+                #print("weights_length: ", weights_length)
+                if len(weights_ee) == weights_length:
+                    self.weight_ee.append(weights_ee)
+                else:
+                    reshaped_weights = np.zeros(weights_length)
+                    reshaped_weights[:len(weights_ee)] = weights_ee
+                    self.weight_ee.append(reshaped_weights)
+            else:
+                self.weight_ee.append(np.zeros(1))
         return velocities
     
     def update_ee_step(self, ii: int) -> None:
@@ -274,15 +291,18 @@ class MayaviAnimator:
         for it_traj in range(self.n_traj-1):
             self.velocities[it_traj] = self.avoider.evaluate_sequence_norm(self.trajectories[:, ii, it_traj])
             
-            weights_sensor = self.avoider.get_final_weights_for_sensors()
-            weights_length = len(self.container.get_tree(0))+1
-            #print("weights_length: ", weights_length)
-            if len(weights_sensor) == weights_length:
-                self.weights_sensors.append(weights_sensor)
+            if self.dynamic_human:
+                weights_sensor = self.avoider.get_final_weights_for_sensors()
+                weights_length = len(self.container.get_tree(0))+1
+                #print("weights_length: ", weights_length)
+                if len(weights_sensor) == weights_length:
+                    self.weights_sensors.append(weights_sensor)
+                else:
+                    reshaped_weights = np.zeros(weights_length)
+                    reshaped_weights[:len(weights_sensor)] = weights_sensor
+                    self.weights_sensors.append(reshaped_weights)
             else:
-                reshaped_weights = np.zeros(weights_length)
-                reshaped_weights[:len(weights_sensor)] = weights_sensor
-                self.weights_sensors.append(reshaped_weights)
+                self.weights_sensors.append(np.zeros(1))
         #return velocities
     
     def update_trajectories(self,position,ii:int):

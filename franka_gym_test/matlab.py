@@ -60,6 +60,7 @@ def draw_box(ax, position, size):
     
     ax.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
 
+
 # Plot each box
 for position, size in zip(boxes, sizes):
     draw_box(ax, position, size)

@@ -1,3 +1,0 @@
-/home/qiao/RL-Dyn-Env-main/ik_controller_bfgs/build_sim_1/CMakeFiles/rebuild_cache.dir
-/home/qiao/RL-Dyn-Env-main/ik_controller_bfgs/build_sim_1/CMakeFiles/edit_cache.dir
-/home/qiao/RL-Dyn-Env-main/ik_controller_bfgs/build_sim_1/CMakeFiles/solve_ik.dir

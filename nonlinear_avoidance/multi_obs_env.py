@@ -784,8 +784,8 @@ def create_2d_human_with_multibodyobstacle() -> MultiBodyObstacle:
 
 
 def create_3d_human():
-    root_position = np.array([0.6, 0.0, 0.25])
-    #root_position = np.array([0.4, -0.2, 0.25])
+    #root_position = np.array([0.6, 0.0, 0.25])
+    root_position = np.array([0.4, -0.2, 0.25])
 
     # Ellipse
     head_axes_length = np.array([0.2, 0.25, 0.3])

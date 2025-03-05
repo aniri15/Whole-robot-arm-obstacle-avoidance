@@ -593,11 +593,18 @@ class MayaviAnimator:
         # pass
 
     def update_step(self, ii: int) -> None:
+        print(f"---------------------{ii}th iteration --------------------------")
+        print("--------------------------------------------------------------------")
+        names = ["body", "neck", "head", "upper arm1", "lower arm1", "upper arm2", "lower arm2", "leg1", "leg2", "convergence"]
         for it_traj in range(self.n_traj):
             velocity = self.avoider.evaluate_sequence(self.trajectories[:, ii, it_traj])
             self.trajectories[:, ii + 1, it_traj] = (
                 velocity * self.delta_time + self.trajectories[:, ii, it_traj]
             )
+            weights = self.avoider.get_final_weights_for_sensors()
+            for i, num in enumerate(weights):
+                print(f"for {names[i]} part, weights are {num}" )
+            print(f"---------------------{it_traj}th model-------------------------")
 
         # Clear
         mlab.clf(figure=None)
