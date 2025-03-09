@@ -164,6 +164,7 @@ class FrankaHumanEnv():
         ''' attach multiple points to the robot arms, in order to use them for obstacle avoidance method later
         '''
         self.link_names = ['link2_sensor_1','link2_sensor_2','link4_sensor_1','link5_sensor_1', 'link5_sensor_2','link5_sensor_3', 'link7_sensor_1']
+        self.hand_names = ['link7_sensor_2']
         links_radius = []
         links_length = []
         links_center = []
@@ -172,6 +173,9 @@ class FrankaHumanEnv():
         offsets = []
         vertex_ = []
         syme = 1
+
+        hand_offests = []
+        hand_quats = []
         
         #print("total_sensors: ", self.total_sensors)
         for i in range(len(self.link_names)):
@@ -202,10 +206,27 @@ class FrankaHumanEnv():
             # print("offsets: ", offset)
             # print("------------------")
         #breakpoint()
+        for u in range(len(self.hand_names)):
+            size = self.get_site_size(self.hand_names[u])
+            hand_quat = self.get_site_quat(self.hand_names[u])
+            axis_x = size[0]
+            axis_y = size[1]
+            axis_z = size[2]
+            offset_ = [[axis_x, 0, 0], [0, axis_y, 0], [0, 0, axis_z], [-axis_x, 0, 0], [0, -axis_y, 0], [0, 0, -axis_z],
+                      [axis_x, axis_y, axis_z], [axis_x, -axis_y, axis_z], [-axis_x, axis_y, axis_z], [-axis_x, -axis_y, axis_z],
+                      [axis_x, axis_y, -axis_z], [axis_x, -axis_y, -axis_z], [-axis_x, axis_y, -axis_z], [-axis_x, -axis_y, -axis_z]]
+            hand_offests.append(offset_)
+            hand_quats.append(hand_quat)
+
+
         self.total_sensors = (1*len(offset)+ (syme-1)*2*len(offset)+2)*len(self.link_names)
-        print("total_sensors: ", self.total_sensors)
+        self.total_sensors_hand = len(offset_)*len(self.hand_names)
+        #self.total_sensors += len(hand_offests[0])
+        print("total_sensors: ", self.total_sensors + self.total_sensors_hand)
         size = [0.005,0.005,0.005]
         self.totoal_j_l2p = []
+        self.hand_j_l2p = []
+
         for i in range(len(self.link_names)):
             body = self.spec.find_body(self.link_names[i])
             j_l2p_ = []
@@ -272,8 +293,29 @@ class FrankaHumanEnv():
                         j_l2p_.append(j_l2p)
             self.totoal_j_l2p.append(j_l2p_)
 
+        for u in range(len(self.hand_names)):
+            body = self.spec.find_body(self.hand_names[u])
+            num = 1
+            offset = hand_offests[u]
+            for point, offset_ in enumerate(offset):
+                body.add_site(name=f"{self.hand_names[u]}_point{num}",
+                                      size= size,
+                                      pos= offset_,
+                                      quat= hand_quats[u],
+                                      rgba= [1,0,0,1])
+                num += 1
+                j_l2p = np.zeros((3,6))
+                pos_l2p = offset_
+                transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+                hat_transl = self.skew_symmetric(transl)
+                j_l2p[:,0:3] = np.eye(3)
+                j_l2p[:,3:6] = -hat_transl
+                self.hand_j_l2p.append(j_l2p)
+
         self.total_j_l2p = np.array(self.totoal_j_l2p)
+        self.hand_j_l2p = np.array(self.hand_j_l2p)
         print("total_j_l2p: ", self.total_j_l2p.shape)
+        print("hand_j_l2p: ", self.hand_j_l2p.shape)
         self.model = self.spec.compile()
         #print(self.spec.to_xml())
         self.data = mujoco.MjData(self.model)
@@ -907,15 +949,14 @@ class FrankaHumanEnv():
         sensors_q_vel_max = []
         sensors_q_vel = []
         #print("weights_sensors: ", np.array(weights_sensors).shape)
-        weights_sensors = np.array(weights_sensors)[len(self.rotation_joints):,:]
-        weights_sensors_obstacles = weights_sensors[:,:-1]
+        weights_sensors = np.array(weights_sensors)[len(self.rotation_joints):,:]  # remove the weights of the joints
+        weights_sensors_obstacles = weights_sensors[:,:-1]   # remove the last column which is the weight of convergence dynamics
         #weights_sensors_obstacles = weights_sensors[:][:-1]
-        #weights_sensors_convergence_dynamics = weights_sensors[:][-1]
         print("weights_sensors_obstacles: ", weights_sensors_obstacles.shape)
         #print("weights ", weights_sensors_obstacles)
         
         #if any(np.any(arr > 0.8) for arr in weights_sensors_obstacles):
-        if np.any(weights_sensors_obstacles > 0.6):
+        if np.any(weights_sensors_obstacles > 0.3):
             index = np.argmax(weights_sensors_obstacles)
             index = index // weights_sensors_obstacles.shape[1]
             print("indx: ", index)
@@ -924,10 +965,15 @@ class FrankaHumanEnv():
             #print("weights ", weights_sensors_obstacles)
             #print("index: ", index)
             #breakpoint()
-            num_sensors_link = self.total_sensors // len(self.link_names)
-            link_idex = index // num_sensors_link
-            self.sensors_index = index - (link_idex * num_sensors_link)
-            self.link_sensor = self.link_names[link_idex]
+            if index < self.total_sensors:
+                num_sensors_link = self.total_sensors // len(self.link_names)
+                link_idex = index // num_sensors_link
+                self.sensors_index = index - (link_idex * num_sensors_link)
+                self.link_sensor = self.link_names[link_idex]
+            else:
+                self.sensors_index = index - self.total_sensors
+                self.link_sensor = self.hand_names[0]
+                link_idex = 0
             jac = self.get_required_sensor_jac(self.link_sensor, link_idex, self.sensors_index)
             self.change_sensor_color_size(self.link_sensor, self.sensors_index, [0,1,0,1])
             mujoco.mj_step(self.model, self.data)
@@ -1091,8 +1137,12 @@ class FrankaHumanEnv():
             # hat_transl = self.skew_symmetric(transl)
             # j_l2p[:,0:3] = np.eye(3)
             # j_l2p[:,3:6] = -hat_transl
-        j_l2p = self.totoal_j_l2p[num][sensor_index]
-        j_q2p = j_l2p @ j_q2l
+        if link != self.hand_names[0]:
+            j_l2p = self.totoal_j_l2p[num][sensor_index]
+            j_q2p = j_l2p @ j_q2l
+        else:
+            j_l2q = self.hand_j_l2p[sensor_index]
+            j_q2p = j_l2q @ j_q2l
         return np.array(j_q2p)
     
     def skew_symmetric(self, v):
@@ -1922,11 +1972,19 @@ class FrankaHumanEnv():
         return joints_sensors_pos
 
     def get_sensor_position(self):
-        sensors_ee_pos = np.zeros((self.total_sensors, 3))
+        sensors_ee_pos = np.zeros((self.total_sensors + self.total_sensors_hand, 3))
         sensors_on_link = self.total_sensors//len(self.link_names)
         num = 0
         for _, name in enumerate(self.link_names):
             for i in range(sensors_on_link):
+                name_ = name + f'_point{i+1}'
+                sensor_pos = self._utils.get_site_xpos(self.model, self.data, name_)
+                #sensor_pos = self.get_site_xpos(name_)
+                sensors_ee_pos[num] = np.array([sensor_pos[0], sensor_pos[1], sensor_pos[2]])
+                num += 1
+
+        for _, name in enumerate(self.hand_names):
+            for i in range(self.total_sensors_hand):
                 name_ = name + f'_point{i+1}'
                 sensor_pos = self._utils.get_site_xpos(self.model, self.data, name_)
                 #sensor_pos = self.get_site_xpos(name_)
