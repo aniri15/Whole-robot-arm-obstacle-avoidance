@@ -10,14 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 
-# from mayavi.api import Engine
-# from mayavi.sources.api import ParametricSurface
-# from mayavi.modules.api import Surface
-# from mayavi import mlab
-
-# (!!!) Somehow cv2 has to be imported after mayavi (?!) 
-import cv2
-
 from vartools.states import Pose
 from vartools.dynamics import ConstantValue
 from vartools.dynamics import LinearSystem, CircularStable
@@ -30,6 +22,7 @@ from dynamic_obstacle_avoidance.obstacles import EllipseWithAxes as Ellipse
 
 from nonlinear_avoidance.multi_body_franka_obs import create_3d_franka_obs
 from nonlinear_avoidance.multi_obs_env import create_3d_human, transform_from_multibodyobstacle_to_multiobstacle
+from nonlinear_avoidance.multi_obs_env import create_3d_table
 #from nonlinear_avoidance.multi_obs_env import create_3d_franka_obs2
 # from nonlinear_avoidance.multi_body_franka_obs import (
 #     transform_from_multibodyobstacle_to_multiobstacle,
@@ -43,20 +36,6 @@ from nonlinear_avoidance.nonlinear_rotation_avoider import (
     ConvergenceDynamicsWithoutSingularity,
 )
 
-#from scripts.three_dimensional.visualizer3d import CubeVisualizer
-
-import matplotlib.pyplot as plt
-
-import gymnasium as gym
-import numpy as np
-from pynput import keyboard
-from envs.custom_scenarios import scenarios
-
-import random
-import time
-
-from envs.config import register_custom_envs
-
 
 Vector = np.ndarray
 
@@ -64,9 +43,6 @@ global ctrl
 global rot_ctrl
 
 
-#from mujoco_py import load_model_from_xml, MjSim, MjViewer
-#import gym
-#import mujoco_py
 
     
 class MayaviAnimator:
@@ -109,18 +85,17 @@ class MayaviAnimator:
         return velocities
 
     def obstacle_initiation(self):
+        # step1 create container of obstacles
+        self.container = MultiObstacleContainer()
         if self.obstacle:
-            # step1 create tree of obstacles
+            # step2 create tree of obstacles
             self.human_obstacle_3d = create_3d_human()
-
-            # step2 transform tree of obstacles to multiobstacle????
+            #self.human_obstacle_3d = create_3d_table()
+            
+            # step3 transform tree of obstacles to multiobstacle????
             transformed_human = transform_from_multibodyobstacle_to_multiobstacle(
                 self.human_obstacle_3d
             )
-
-        # step3 create container of obstacles
-        self.container = MultiObstacleContainer()
-        if self.dynamic_human:
             self.container.append(transformed_human)
 
     def set_up_franka(self):
@@ -167,22 +142,26 @@ class MayaviAnimator:
         
 
 #-----------------------main steps -------------------------------------------------------------------
+        # step1 create container of obstacles
+        self.container = MultiObstacleContainer()
+
         if self.obstacle:
-            # step1 create tree of obstacles
+            # step2 create tree of obstacles
             self.human_obstacle_3d = create_3d_human()
 
-            # step2 transform tree of obstacles to multiobstacle????
+            # step3 transform tree of obstacles to multiobstacle????
             transformed_human = transform_from_multibodyobstacle_to_multiobstacle(
                 self.human_obstacle_3d
             )
 
+            self.container.append(transformed_human)
+
         #self.human_obstacle_3d = create_3d_franka_obs2()
         dynamics = LinearSystem(attractor_position=self.attractor_position)
         
-        # step3 create container of obstacles
-        self.container = MultiObstacleContainer()
-        if self.dynamic_human:
-            self.container.append(transformed_human)
+        
+        # if self.dynamic_human:
+        #     self.container.append(transformed_human)
         
         #self.container.append(transformed_human)
 
@@ -267,7 +246,7 @@ class MayaviAnimator:
         for it_traj in range(self.n_traj):
             velocities[it_traj] = self.avoider.evaluate_sequence(self.trajectories[:, ii, it_traj])
 
-            if self.dynamic_human:
+            if self.obstacle:
                 weights_ee = self.avoider.get_final_weights_for_sensors()
                 weights_length = len(self.container.get_tree(0))+1
                 #print("weights_length: ", weights_length)
@@ -291,7 +270,7 @@ class MayaviAnimator:
         for it_traj in range(self.n_traj-1):
             self.velocities[it_traj] = self.avoider.evaluate_sequence_norm(self.trajectories[:, ii, it_traj])
             
-            if self.dynamic_human:
+            if self.obstacle:
                 weights_sensor = self.avoider.get_final_weights_for_sensors()
                 weights_length = len(self.container.get_tree(0))+1
                 #print("weights_length: ", weights_length)

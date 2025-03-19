@@ -262,7 +262,7 @@ def create_obstacle_l(margin_absolut=0.0, scaling=1.0, pose: Optional[Pose] = No
     )
 
     return letter_obstacle
-
+################################################################################################################################
 # Two kinds of way to create containers
 def create_epfl_multi_container(scaling=1.0, margin_absolut=0.1):
     container = MultiObstacleContainer()
@@ -947,7 +947,7 @@ if (__name__) == "__main__":
     # visualize_avoidance()
     # animation_epfl(save_animation=False)
     # animation_chaotic_epfl(save_animation=False)
-    animation_dynamic_epfl(save_animation=True)
+    animation_dynamic_epfl(save_animation=False)
 
     # test_integration_normal_epfl(visualize=True)
     # _test_dynamic_multi_tree_evaluation_single_e(visualize=True)

@@ -987,44 +987,30 @@ def create_3d_human():
 
 def create_3d_table():
     #root_position = np.array([0.6, 0.0, 0.25])
-    root_position = np.array([0.4, -0.2, 0.25])
+    root_position = np.array([0.4, -0.45, 0.25])
 
     # Cuboid
-    leg_axes_length = np.array([0.1, 0.1, 0.2])
+    leg_axes_length = np.array([0.08, 0.08, 0.2])
     table_axes_length = np.array([0.4, 0.5, 0.15])
     
     # Reference points
     table_reference = np.array([0, 0, 0])
 
-    leg1_reference = np.array([0.0, 0, -0.07])
-    parent_of_neck_reference = np.array([0.0, 0, 0.25])
+    leg_reference = np.array([0.0, 0, 0.08])
+    parent_of_leg1_reference = np.array([-0.2, -0.25, -0.075])
 
-    #head_reference = np.array([0.2, 0.22, 0.3])
-    head_reference = np.array([0.0, 0, 0.0])
-    parent_of_head_reference = np.array([0.0, 0, 0.07])
+    parent_of_leg2_reference = np.array([0.2, -0.25, -0.075])
 
-    upperarm1_reference = np.array([0, 0, -0.2])
-    parent_of_upperarm1_reference = np.array([0.0, 0.18, 0.2])
+    parent_of_leg3_reference = np.array([0.2, 0.25, -0.075])
 
-    lowerarm1_reference = np.array([0, 0, -0.18])
-    parent_of_lowerarm1_reference = np.array([0.0, 0, 0.2])
-
-    upperarm2_reference = np.array([0.0, 0, 0.2])
-    parent_of_upperarm2_reference = np.array([0, -0.19, 0.2])
-
-    lowerarm2_reference = np.array([0, 0.0, 0.18])
-    parent_of_lowerarm2_reference = np.array([0, 0.0, -0.2])
-
-    # legs_reference = np.array([0.15, 0.24686981, -0.63978714])
-    # parent_of_leg1_reference = np.array([0.15, 0, -0.3])
-    # parent_of_leg2_reference = np.array([-0.15, 0, -0.3])
+    parent_of_leg4_reference = np.array([-0.2, 0.25, -0.075])
 
     
     margin_absolut = 0.0
 
     dimension = 3
 
-    new_human = MultiBodyObstacle(
+    new_table = MultiBodyObstacle(
         visualization_handler=None,
         pose_updater=None,
         robot=None,
@@ -1033,150 +1019,82 @@ def create_3d_table():
 
     distance_scaling = 3
 
-    new_human.set_root(
+    new_table.set_root(
         Cuboid(
-            axes_length=body_exes_length,
+            axes_length=table_axes_length,
             #center_position=np.zeros(dimension),
             center_position=root_position,
             #center_position=np.array([1, 0.0, 0.25]),
             distance_scaling=distance_scaling,
             margin_absolut=margin_absolut,
         ),
-        name="body",
+        name="table",
     )
 
-    new_human[-1].set_reference_point(body_reference, in_global_frame=False)
+    new_table[-1].set_reference_point(table_reference, in_global_frame=False)
 
-    new_human.add_component(
+    new_table.add_component(
         Cuboid(
             # axes_length=np.array([0.12, 0.2, 0.12]),
-            axes_length=neck_axes_length,
+            axes_length=leg_axes_length,
             center_position=np.zeros(dimension),
             distance_scaling=distance_scaling,
             margin_absolut=margin_absolut,
         ),
-        name="neck",
-        parent_name="body",
-        reference_position=neck_reference,
-        parent_reference_position=parent_of_neck_reference,
+        name="leg1",
+        parent_name="table",
+        reference_position=leg_reference,
+        parent_reference_position=parent_of_leg1_reference,
     )
 
-    new_human.add_component(
-        Ellipse(
-            axes_length=head_axes_length,
+    new_table.add_component(
+        Cuboid(
+            axes_length=leg_axes_length,
             center_position=np.zeros(dimension),
             distance_scaling=distance_scaling,
             margin_absolut=margin_absolut,
         ),
-        name="head",
-        parent_name="neck",
-        reference_position=head_reference,
-        parent_reference_position=parent_of_head_reference,
+        name="leg2",
+        parent_name="table",
+        reference_position=leg_reference,
+        parent_reference_position=parent_of_leg2_reference,
     )
 
-    new_human.add_component(
-        Ellipse(
-            axes_length=upper_arm_axes,
+    new_table.add_component(
+        Cuboid(
+            axes_length=leg_axes_length,
             center_position=np.zeros(dimension),
             distance_scaling=distance_scaling,
             margin_absolut=margin_absolut,
             #orientation=Rotation.from_euler("xyz", [0, 0.1 * np.pi, -0.3 * np.pi]),
-            orientation=Rotation.from_euler("xyz", [0, 0.1 * np.pi, 0. * np.pi]),
+            #orientation=Rotation.from_euler("xyz", [0, 0.1 * np.pi, 0. * np.pi]),
         ),
-        name="upperarm1",
-        parent_name="body",
-        reference_position= upperarm1_reference,
-        parent_reference_position=parent_of_upperarm1_reference,
+        name="leg3",
+        parent_name="table",
+        reference_position= leg_reference,
+        parent_reference_position=parent_of_leg3_reference,
     )
 
-    new_human.add_component(
-        Ellipse(
-            axes_length=lower_arm_axes,
+    new_table.add_component(
+        Cuboid(
+            axes_length=leg_axes_length,
             center_position=np.zeros(dimension),
             distance_scaling=distance_scaling,
             margin_absolut=margin_absolut,
             #orientation=Rotation.from_euler("xyz", [0, 0.2 * np.pi, -0.8 * np.pi]),
-            orientation = Rotation.from_euler("xyz", [0, 0.2 * np.pi, 0. * np.pi]),
+            #orientation = Rotation.from_euler("xyz", [0, 0.2 * np.pi, 0. * np.pi]),
         ),
-        name="lowerarm1",
-        parent_name="upperarm1",
-        reference_position=lowerarm1_reference,
-        parent_reference_position=parent_of_lowerarm1_reference,
+        name="leg4",
+        parent_name="table",
+        reference_position=leg_reference,
+        parent_reference_position=parent_of_leg4_reference,
     )
 
-    new_human.add_component(
-        Ellipse(
-            axes_length=upper_arm_axes,
-            center_position=np.zeros(dimension),
-            distance_scaling=distance_scaling,
-            margin_absolut=margin_absolut,
-            orientation=Rotation.from_euler("xyz", [0, 0.3 * np.pi, 0]),
-        ),
-        name="upperarm2",
-        parent_name="body",
-        reference_position=upperarm2_reference,
-        parent_reference_position= parent_of_upperarm2_reference,
-    )
 
-    new_human.add_component(
-        Ellipse(
-            axes_length=lower_arm_axes,
-            center_position=np.zeros(dimension),
-            distance_scaling=distance_scaling,
-            margin_absolut=margin_absolut,
-            orientation=Rotation.from_euler("xyz", [0, 0.5 * np.pi, 0]),
-        ),
-        name="lowerarm2",
-        parent_name="upperarm2",
-        reference_position=lowerarm2_reference,
-        parent_reference_position=parent_of_lowerarm2_reference,
-    )
+    new_table.update()
+    return new_table
 
-    # Plus legs (!)
-    # new_human.add_component(
-    #     Ellipse(
-    #         axes_length=legs_axes,
-    #         center_position=np.zeros(dimension),
-    #         distance_scaling=distance_scaling,
-    #         margin_absolut=margin_absolut,
-    #         # orientation=Rotation.from_euler("zy", [np.pi * 0.5, np.pi * 0.4]),
-    #         orientation=Rotation.from_euler("zx", [np.pi * 0.5, np.pi * 1.7]),
-    #     ),
-    #     name="leg1",
-    #     parent_name="body",
-    #     reference_position=legs_reference,
-    #     parent_reference_position=parent_of_leg1_reference,
-    # )
-
-    # new_human.add_component(
-    #     Ellipse(
-    #         axes_length=legs_axes,
-    #         center_position=np.zeros(dimension),
-    #         distance_scaling=distance_scaling,
-    #         margin_absolut=margin_absolut,
-    #         # orientation=Rotation.from_euler("zy", [np.pi * 0.5, np.pi * 0.4]),
-    #         orientation=Rotation.from_euler("zx", [np.pi * 0.5, np.pi * 1.3]),
-    #     ),
-    #     name="leg2",
-    #     parent_name="body",
-    #     reference_position=legs_reference,
-    #     parent_reference_position=parent_of_leg2_reference,
-    # )
-
-    # idx_obs = new_human.get_obstacle_id_from_name("lowerarm1")
-    # new_human[idx_obs].orientation = 70 * np.pi / 180
-    # # new_human.set_orientation(idx_obs, orientation=)
-    # new_human.align_position_with_parent(idx_obs)
-
-    # idx_obs = new_human.get_obstacle_id_from_name("lowerarm2")
-    # new_human[idx_obs].orientation = 45 * np.pi / 180
-    # # new_human.set_orientation(idx_obs, orientation=)
-    # new_human.align_position_with_parent(idx_obs)
-
-    new_human.update()
-    return new_human
-
-def create_3d_obstacles(obstacles):
+def create_3d_(obstacles):
     #obstacles_position = 
     upper_arm_axes = [0.5, 0.18, 0.18]
     lower_arm_axes = [0.4, 0.14, 0.14]

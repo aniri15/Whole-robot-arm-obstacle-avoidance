@@ -26,7 +26,7 @@ print("scene_path: ", scene_path)
 # goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] good comparision
 # goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] unreachable for norm dir
 goal = np.array([0.3, 0.2, 0.3])
-goal = np.array([0.3, 0, 0.6]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
+goal = np.array([0.15, 0.6, 0.3]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
 env = FrankaHumanEnv(scene_path,dynamic_human=True, goal=goal, obstacle = True) 
 norm_dir = 1
 #norm_dir = 0

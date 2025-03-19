@@ -17,7 +17,7 @@ from envs.custom_scenarios import scenarios
 #from envs.ik_controller import LevenbegMarquardtIK
 import matplotlib.pyplot as plt
 from franka_gym_test.franka_human_avoider import MayaviAnimator
-from franka_gym_test.pandaIk import PandaIK
+#from franka_gym_test.pandaIk import PandaIK
 import os
 from dynamic_obstacle_avoidance.obstacles import CuboidXd as Cuboid
 from dynamic_obstacle_avoidance.obstacles import EllipseWithAxes as Ellipse
@@ -66,7 +66,7 @@ class FrankaHumanEnv():
         self.dynamic_human = dynamic_human
         self.obstacle = obstacle
         self.goal = goal
-        self.pandaik = PandaIK()
+        #self.pandaik = PandaIK()
 
         # Initialize MuJoCo environment with the combined model
         #self.spec = mujoco.MjSpec.from_file(self.fullpath)
@@ -948,13 +948,14 @@ class FrankaHumanEnv():
         weights_sensors = self.animator.weights_sensors
         sensors_q_vel_max = []
         sensors_q_vel = []
-        #print("weights_sensors: ", np.array(weights_sensors).shape)
+        print("weights_sensors: ", np.array(weights_sensors).shape)
         weights_sensors = np.array(weights_sensors)[len(self.rotation_joints):,:]  # remove the weights of the joints
         weights_sensors_obstacles = weights_sensors[:,:-1]   # remove the last column which is the weight of convergence dynamics
         #weights_sensors_obstacles = weights_sensors[:][:-1]
         print("weights_sensors_obstacles: ", weights_sensors_obstacles.shape)
+
         #print("weights ", weights_sensors_obstacles)
-        
+    
         #if any(np.any(arr > 0.8) for arr in weights_sensors_obstacles):
         if np.any(weights_sensors_obstacles > 0.3):
             index = np.argmax(weights_sensors_obstacles)
@@ -1521,7 +1522,7 @@ class FrankaHumanEnv():
         it_max = self.it_max
         #sampled_points = init_position[1:]
         self.animator = MayaviAnimator(it_max=it_max, current_position=init_position, 
-                                  attractor_position=goal, dynamic_human=self.dynamic_human)    
+                                  attractor_position=goal, dynamic_human=self.dynamic_human, obstacle=self.obstacle)    
         self.animator.obstacle_initiation()
         if self.obstacle:
             self.human_obstacle = self.animator.human_obstacle_3d
