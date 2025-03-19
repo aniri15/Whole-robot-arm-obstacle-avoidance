@@ -1,0 +1,28 @@
+### Packages for More Extensive Testing and Scripting. ###
+pandas
+mayavi
+PyQt5
+
+# =======
+ipython==7.34  # 8-series of ipython has gives random error when reloading
+# pytest>=6.0
+# pytest-cov>=2.0
+# mypy>=0.910
+# flake8>=3.9
+# tox>=3.24
+
+black
+pep8
+autopep8
+flake8
+mypy
+
+pre-commit
+pytest
+
+# For the robot class
+sympy
+
+# Parser / Lark
+lark
+

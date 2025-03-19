@@ -1,0 +1,75 @@
+<mujoco model="panda scene">
+  <include file="panda.xml"/>
+
+  <statistic center="0.3 0 0.4" extent="1"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="120" elevation="-20"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+      markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+  </asset>
+	
+  <worldbody>
+    <light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+    <geom name="floor" pos="0 0 -0.25" size="0 0 0.05" type="plane" material="groundplane"/>
+
+		<!-- Table -->
+		<!--body name="table" pos="-0.5 0 -0.125">
+			<geom type="box" size="0.2 0.12 0.125" rgba="0.93 0.93 0.93 1"/>
+		</body-->
+	
+    <!--Human shaped robot-->
+		<!--body name="human" pos="1.6 0.75 -0.13" quat="0.707 0 0 0.707"-->
+		<!-- Body -->
+		<body name="obstacle_0" pos="0 0 0">
+			<geom type="box" size="0.075 0.2 0.25" rgba="0 1 0 1"/>
+		</body>
+
+		<!-- Neck -->
+		<body name="obstacle_1" pos="0 0 0.32">
+			<geom type="box" size="0.06 0.075 0.2" rgba="0 1 0 1"/>
+		</body>
+
+		<!-- Head -->
+		<body name="obstacle_2" pos="0 0 0.39" quat="0 0 0 1">
+			<geom type="ellipsoid" size="0.1 0.125 0.15" rgba="1 0 0 1"/>
+		</body>
+
+		<!-- Left Arm -->
+		<body name="obstacle_3" pos="0.03632713 0.13       0.3902113" quat="0  0.156434465 -0.453990500  1.0">
+			<geom type="ellipsoid" size="0.09 0.09 0.25" rgba="1 0 0 1"/>
+		</body>
+		<body name="obstacle_4" pos="-0.01294083 0.01781153 0.72604567" quat=" 0. 0.30901699 -0.95105652  1">
+			<geom type="ellipsoid" size="0.07 0.07 0.2" rgba="0 0 1 1"/>
+		</body>
+
+		<!-- Right Arm -->
+		<body name="obstacle_5" pos="-0.1618034  -0.19        0.08244295" quat="0.   0.4539905 0.  1.">
+			<geom type="ellipsoid" size="0.09 0.09 0.25" rgba="0 0 1 1"/>
+		</body>
+		<body name="obstacle_6" pos="-0.4963932 -0.19      -0.0351141" quat="0    0.70710678  0.   1">
+			<geom type="ellipsoid" size="0.07 0.07 0.2" rgba="0 0 1 1"/>
+		</body>
+
+		<!-- Left Leg-->
+		<!--body name="left_leg" pos="-0.1 0 0.6">
+			<geom type="ellipsoid" size="0.125 0.1 0.5" rgba="0.5 0.5 0.5 1"/>
+		</body-->
+
+		<!-- Right Leg -->
+		<!--body name="right_leg" pos="0.1 0 0.6">
+			<geom type="ellipsoid" size="0.125 0.1 0.5" rgba="0.5 0.5 0.5 1"/>
+		</body-->
+		<!--/body-->
+
+    <!-- Target Position Pointer -->
+		<site name="target_pos" pos="0.5 0.2 0.6" size="0.005 0.005 0.005" rgba="0 0 0 1" type="sphere"/>
+  </worldbody>
+</mujoco>

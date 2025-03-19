@@ -1,0 +1,3 @@
+/home/aniri/nonlinear_obstacle_avoidance/build/CMakeFiles/rebuild_cache.dir
+/home/aniri/nonlinear_obstacle_avoidance/build/CMakeFiles/edit_cache.dir
+/home/aniri/nonlinear_obstacle_avoidance/build/CMakeFiles/ik-algorithms-example.dir

@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/aniri/nonlinear_obstacle_avoidance/inverse-kinematics-algorithms/example/main.cpp
+CCD.h
+/home/aniri/nonlinear_obstacle_avoidance/inverse-kinematics-algorithms/example/CCD.h
+FABRIK.h
+/home/aniri/nonlinear_obstacle_avoidance/inverse-kinematics-algorithms/example/FABRIK.h
+iostream
+-
+
