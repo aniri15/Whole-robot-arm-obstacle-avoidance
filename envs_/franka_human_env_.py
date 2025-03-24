@@ -7,7 +7,8 @@ import mediapy as media
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from extended_roam_examples.human_obstacle.franka_human_avoider_ import MayaviAnimator
+#from extended_roam_examples.human_obstacle.franka_human_avoider_ import MayaviAnimator
+from extended_roam_examples.multi_obstacles.franka_multi_obs_avoider import ROAM as MayaviAnimator
 import os
 from dynamic_obstacle_avoidance.obstacles import CuboidXd as Cuboid
 from dynamic_obstacle_avoidance.obstacles import EllipseWithAxes as Ellipse
@@ -107,6 +108,7 @@ class FrankaHumanEnv_():
         self.adjust_sensors_name = []
         self.collision_name = []
         self.collision_num = 0
+    
         #self.initial_simulation()
         self.bulid_goal_object(goal)
         self.build_sensor_points()
@@ -947,31 +949,70 @@ class FrankaHumanEnv_():
         return num_contacts
 
     def replay(self):
-        # use the mujoco viewer to replay the simulation
+        # Get the model and data objects
         m = self.model
         d = self.data
-        
+
+        # Initialize MuJoCo viewer
         with mujoco.viewer.launch_passive(m, d) as viewer:
-                # Close the viewer automatically after 30 wall-seconds.
-                start = time.time()
-                while viewer.is_running() and time.time() - start < 80:
-                    step_start = time.time()
-                    for i in range(len(self.trajectory_qpos)):
-                        d.qpos = self.trajectory_qpos[i]
-                        gem_pos = np.zeros((89,3))
-                        #d.xpos, d.xquat = self.model_storage[i]
-                        m.geom_pos, m.geom_quat = self.model_storage[i]
-                        m.site_size, m.site_rgba = self.model_size_color_storage[i]
-                        mujoco.mj_step(m, d)
-                        viewer.sync()
+            start = time.time()
+            while viewer.is_running() and time.time() - start < 1000:
+                step_start = time.time()
+                for i in range(len(self.trajectory_qpos)):
+                    # Update joint positions from the stored trajectory
+                    d.qpos[:] = self.trajectory_qpos[i]
                     
-                    #print("weights", self.weights_storage)
-                    print("---------------------one loop done---------------------")
-                    time.sleep(0.5)
-                    # Rudimentary time keeping, will drift relative to wall clock.
-                    #time_until_next_step = m.opt.timestep - (time.time() - step_start)
-                    #if time_until_next_step > 0:
-                    #    time.sleep(time_until_next_step)
+                    # Update geometry and visualization properties
+                    gem_pos = np.zeros((89, 3))  # Example: 89 geometries
+                    m.geom_pos[:], m.geom_quat[:] = self.model_storage[i]
+                    m.site_size[:], m.site_rgba[:] = self.model_size_color_storage[i]
+
+                    # Sphere size (radius)
+                    size = np.array([0.01, 0.01, 0.01], dtype=np.float64)  # 3-element float array
+                    pos_start = self.get_ee_position()
+
+                    # Position and orientation
+                    pos = np.array([pos_start[0], pos_start[1], pos_start[2]], dtype=np.float64)  # 3-element float array
+                    mat = np.eye(3, dtype=np.float64).flatten()  # 3x3 identity matrix, flattened to 9 elements
+
+                    # RGBA color
+                    rgba = np.array([0.8, 0.8, 0.7, 0.1], dtype=np.float32)  # 4-element float array
+
+                    # Initialize geometry
+                    viewer.user_scn.ngeom+=1
+                    mujoco.mjv_initGeom(
+                        viewer.user_scn.geoms[viewer.user_scn.ngeom-1],
+                        mujoco.mjtGeom.mjGEOM_SPHERE,
+                        size,
+                        pos,
+                        mat,
+                        rgba
+                    )
+
+                    # Draw a line trajectory between consecutive positions
+                    line_geom = mujoco.MjvGeom()
+
+                    # Step the simulation
+                    mujoco.mj_step(m, d)
+                    pos_after = self.get_ee_position()
+                    if i > 0:
+                        mujoco.mjv_connector(
+                            line_geom,
+                            mujoco.mjtGeom.mjGEOM_LINE,
+                            2,
+                            pos_start,
+                            pos_after,
+                        )
+
+                    # Sync the viewer to render the updated state
+                    viewer.sync()
+
+                    # Sleep to maintain real-time playback speed
+                    time.sleep(0.005)
+
+                print("---------------------one loop done---------------------")
+                time.sleep(0.5)
+
 
     '''
     # --------------------------------------------- qpos calculation -------------------------------------------------------------------------

@@ -25,12 +25,16 @@ print("scene_path: ", scene_path)
 # good example
 # goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] good comparision
 # goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] unreachable for norm dir
-goal = np.array([0.3, 0.2, 0.3])
-goal = np.array([0.4, 0.4, 0.5]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
-dynamic_human = True
+goal = np.array([0.5, -0.3, 0.6])
+#goal = np.array([0.4, 0.2, 0.5]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
+#goal = np.array([0.67735902, 0.27006253, 0.22115411]) #0.67735902, 0.27006253, 0.22115411
+dynamic_human = False
 obstacle = True
 env = FrankaMultiObsEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
-env_name = "human_table" # "table_box" or "complex_table" or "human_table"
+if env.check_collision():
+    print("collision")
+    breakpoint()
+env_name = "human_table" # "table_box" or "complex_table" or "human_table" or "cuboid_sphere" or "table"
 if obstacle == True:
     start_positions = env.get_joints_sensors_end_position()
     print("end_effector_position: ", env.get_ee_position())
@@ -50,10 +54,12 @@ elif obstacle == False:
 print("singular config number", env.singularities_number)
 print('------------------------------------')
 print("start replay")
+print("goal: ", goal)
 print("collision number: ", env.collision_num)
 print("sensors activation number", env.sensors_activation_num)
 print("sensors name: ", env.adjust_sensors_name)
 print("collision name: ", env.collision_name)
+print("averaged time: ", np.mean(env.time_storage))
 #print("velocity average: ", np.mean(env.vel_storage, axis=0))
 env.replay()
 

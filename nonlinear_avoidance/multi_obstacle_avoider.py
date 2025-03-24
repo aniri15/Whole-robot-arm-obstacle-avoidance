@@ -114,7 +114,8 @@ def compute_multiobstacle_relative_velocity(
     n_obstacles = len(environment)
     gammas = np.zeros(n_obstacles)
     for ii, obs in enumerate(environment):
-        gammas[ii] = obs.get_gamma(position, in_global_frame=True)
+        current_gamma = obs.get_gamma(position, in_global_frame=True)
+        gammas[ii] = current_gamma
 
     weights = compute_gamma_weights(gammas, 1.0)
     # weights = compute_weights(gammas, 1.0)

@@ -24,6 +24,7 @@ from dynamic_obstacle_avoidance.containers import ObstacleContainer
 from dynamic_obstacle_avoidance.obstacles import Obstacle
 from dynamic_obstacle_avoidance.obstacles import CuboidXd as Cuboid
 from dynamic_obstacle_avoidance.obstacles import EllipseWithAxes as Ellipse
+from dynamic_obstacle_avoidance.obstacles import HyperSphere
 
 from nonlinear_avoidance.rigid_body import RigidBody
 from nonlinear_avoidance.multi_obstacle import MultiObstacle
@@ -655,6 +656,7 @@ def transform_from_multibodyobstacle_to_multiobstacle(
             continue
 
         new_component = multibody_obstacle.get_component(index)
+        reference = new_component.get_reference_point(in_global_frame=False)
         new_multi.add_component(
             new_component,
             parent_ind=ind_parent,
@@ -796,7 +798,7 @@ def create_3d_human(root_position):
 
     # Cuboid
     body_exes_length = np.array([0.15, 0.4, 0.5])
-    neck_axes_length = np.array([0.12, 0.15, 0.4])
+    neck_axes_length = np.array([0.12, 0.15, 0.2])
     
     # Reference points
     body_reference = np.array([0.0, 0, -0.2])
@@ -1343,7 +1345,7 @@ def create_3d_box(root_position):
     #root_position = np.array([0.4, 0.6, 0.25])
 
     # Cuboid
-    box_axes_length = np.array([0.1, 0.1, 0.06])
+    box_axes_length = np.array([0.3, 0.1, 0.2])
     
     # Reference points
     box_reference = np.array([0.0, 0, 0.015])
@@ -1377,6 +1379,85 @@ def create_3d_box(root_position):
 
     new_box.update()
     return new_box
+
+def create_3d_sphere(root_position):
+    #root_position = np.array([0.6, 0.0, 0.25])
+    #root_position = np.array([0.4, 0.6, 0.25])
+
+    sphere_radius = 0.05
+    sphere_axes_length = np.array([0.1, 0.1, 0.1])
+    
+    # Reference points
+    sphere_reference = np.array([0.0, 0, 0.015])
+
+    margin_absolut = 0.0
+
+    dimension = 3
+
+    new_sphere = MultiBodyObstacle(
+        visualization_handler=None,
+        pose_updater=None,
+        robot=None,
+    )
+    # new_human = MultiObstacle(Pose(np.array([0.0, 0.0, 0.0])))
+
+    distance_scaling = 3
+
+    new_sphere.set_root(
+        Ellipse(
+            axes_length=sphere_axes_length,
+            #center_position=np.zeros(dimension),
+            center_position=root_position,
+            #center_position=np.array([1, 0.0, 0.25]),
+            distance_scaling=distance_scaling,
+            margin_absolut=margin_absolut,
+        ),
+        name="sphere",
+    )
+
+    #new_box[-1].set_reference_point(box_reference, in_global_frame=False)
+
+    new_sphere.update()
+    return new_sphere
+
+def create_3d_cuboid(root_position):
+    #root_position = np.array([0.6, 0.0, 0.25])
+    #root_position = np.array([0.4, 0.6, 0.25])
+
+    cuboid_axes_length = np.array([0.2, 0.2, 0.5])
+    
+    # Reference points
+    cuboid_reference = np.array([0.0, 0, 0.015])
+
+    margin_absolut = 0.0
+
+    dimension = 3
+
+    new_cuboid = MultiBodyObstacle(
+        visualization_handler=None,
+        pose_updater=None,
+        robot=None,
+    )
+    # new_human = MultiObstacle(Pose(np.array([0.0, 0.0, 0.0])))
+
+    distance_scaling = 3
+
+    new_cuboid.set_root(
+        Cuboid(
+            axes_length=cuboid_axes_length,
+            #center_position=np.zeros(dimension),
+            center_position=root_position,
+            #center_position=np.array([1, 0.0, 0.25]),
+            distance_scaling=distance_scaling,
+            margin_absolut=margin_absolut,
+        ),
+        name="cuboid",
+    )
+
+    #new_box[-1].set_reference_point(box_reference, in_global_frame=False)
+
+    new_cuboid.update()
+    return new_cuboid
 
 def create_3d_cross(root_position):
     vertical_axes_length = np.array([0.03, 0.03, 0.1])

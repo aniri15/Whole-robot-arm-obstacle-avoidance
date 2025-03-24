@@ -22,7 +22,9 @@ from dynamic_obstacle_avoidance.obstacles import EllipseWithAxes as Ellipse
 
 from nonlinear_avoidance.multi_body_franka_obs import create_3d_franka_obs
 from nonlinear_avoidance.multi_obs_env import create_3d_human, transform_from_multibodyobstacle_to_multiobstacle
-from nonlinear_avoidance.multi_obs_env import create_3d_table,create_3d_long_table, create_3d_table_with_box,create_3d_box, create_3d_cross, create_3d_concave_word, create_3d_star_shape
+from nonlinear_avoidance.multi_obs_env import create_3d_table,create_3d_long_table, create_3d_table_with_box,create_3d_box
+from nonlinear_avoidance.multi_obs_env import create_3d_cross, create_3d_concave_word, create_3d_star_shape
+from nonlinear_avoidance.multi_obs_env import create_3d_sphere, create_3d_cuboid
 #from nonlinear_avoidance.multi_obs_env import create_3d_franka_obs2
 # from nonlinear_avoidance.multi_body_franka_obs import (
 #     transform_from_multibodyobstacle_to_multiobstacle,
@@ -72,13 +74,18 @@ class ROAM:
         self.attractor_position = attractor_position
         self.dynamic_human = dynamic_human  # the obstacle is dynamic
         self.obstacle = obstacle # the obstacle is existent
+        self.human = False
+        self.sphere = False
 
     def run_norm(self,ii):    
         self.update_ee_step(ii)
         self.update_norm_dir(ii)
-        if self.dynamic_human:
+        if self.dynamic_human & self.obstacle:
             #self.update_obstacle_pose()
-            self.update_human(ii)
+            if self.sphere:
+                self.update_sphere(ii)
+            if self.human:
+                self.update_human(ii)
         return self.velocities
     
     def run(self,ii):
@@ -123,6 +130,7 @@ class ROAM:
                     self.dynamics[i] = LinearMovement(pose.position, -direction, distance_max=2).evaluate
                 #if i == 1:
                 #    self.dynamics[i] = LinearMovement(pose.position, direction, distance_max=2).evaluate
+            self.human = True
 
     def obstacle_initiation_table_box(self):
         # step1 create container of obstacles
@@ -159,6 +167,22 @@ class ROAM:
                     self.dynamics[i] = LinearMovement(pose.position, -direction, distance_max=1).evaluate
                 #if i == 1:
                 #    self.dynamics[i] = LinearMovement(pose.position, direction, distance_max=2).evaluate
+
+    def obstacle_initiation_table(self):
+        self.container = MultiObstacleContainer()
+        if self.obstacle:
+            table_root_position = np.array([0.6, 0, 0.25])
+            self.table_obstacle_3d = create_3d_table(table_root_position)
+            self.box_obstacle_3d = create_3d_box(table_root_position + np.array([0., 0., 0.1]))
+            transformed_table = transform_from_multibodyobstacle_to_multiobstacle(
+                self.table_obstacle_3d
+            )
+            transformed_box = transform_from_multibodyobstacle_to_multiobstacle(
+                self.box_obstacle_3d
+            )
+            self.container.append(transformed_table)
+            self.container.append(transformed_box)
+
 
     def obstacle_initiation_table_multiobs(self):
         # step1 create container of obstacles
@@ -208,6 +232,62 @@ class ROAM:
                 #if i == 1:
                 #    self.dynamics[i] = LinearMovement(pose.position, direction, distance_max=2).evaluate
 
+    def obstacle_initiation_cuboid_sphere(self):
+        # step1 create container of obstacles
+        self.container = MultiObstacleContainer()
+
+        if self.obstacle:
+            # step2 create tree of obstacles
+            #human_obs_root_position = np.array([0.4, -0.2, 0.25])
+            cuboid_obs_root_position = np.array([0.5, -0.2, 0.25])
+            sphere_1_obs_root_position = np.array([0.3, -3, 0.6]) #0,1,0.6
+            sphere_2_obs_root_position = np.array([2, -0.4, 0.6])
+            sphere_3_obs_root_position = np.array([0, 1, 0.6])
+
+
+            #self.human_obstacle_3d = create_3d_human(human_obs_root_position)
+            self.cuboid_obstacle_3d = create_3d_cuboid(cuboid_obs_root_position)
+            self.sphere_1_obstacle_3d = create_3d_sphere(sphere_1_obs_root_position)
+            self.sphere_2_obstacle_3d = create_3d_sphere(sphere_2_obs_root_position)
+            self.sphere_3_obstacle_3d = create_3d_sphere(sphere_3_obs_root_position)
+
+            
+            # step3 transform tree of obstacles to multiobstacle
+            transformed_cuboid = transform_from_multibodyobstacle_to_multiobstacle(
+                self.cuboid_obstacle_3d
+            )
+            transformed_sphere_1 = transform_from_multibodyobstacle_to_multiobstacle(
+                self.sphere_1_obstacle_3d
+            )
+            transformed_sphere_2 = transform_from_multibodyobstacle_to_multiobstacle(
+                self.sphere_2_obstacle_3d
+            )
+            transformed_sphere_3 = transform_from_multibodyobstacle_to_multiobstacle(
+                self.sphere_3_obstacle_3d
+            )
+
+            self.container.append(transformed_cuboid)
+            self.container.append(transformed_sphere_1)
+            self.container.append(transformed_sphere_2)
+            self.container.append(transformed_sphere_3)
+
+            self.sphere = True
+
+            # self.dynamics = [None]*len(self.container)
+            # for i in range(len(self.container)):
+            #     pose = self.container.get_obstacle_tree(i).get_pose()
+            #     orientation = pose.orientation.as_euler("xyz", degrees=True)
+            #     direction_x = np.array([np.cos(orientation[1]),0,0])
+            #     direction_y = np.array([0,np.cos(orientation[1]),0])
+            #     direction_z = np.array([0,0,np.cos(orientation[1])])
+            #     if i == 1:
+            #         self.dynamics[i] = DirectionLinearMovement(pose.position, direction_y, distance_max=0.1).evaluate
+            #     if i == 2:
+            #         self.dynamics[i] = DirectionLinearMovement(pose.position, -direction_x, distance_max=0.12).evaluate
+            #     if i == 3:
+            #         self.dynamics[i] = DirectionLinearMovement(pose.position, direction_y, distance_max=0.12).evaluate
+
+
     def set_up_franka(self):
         dimension = 3
 
@@ -232,7 +312,7 @@ class ROAM:
             # reference_dynamics=linearsystem(attractor_position=dynamics.attractor_position),
             create_convergence_dynamics=True,
             convergence_radius=0.55 * math.pi,
-            smooth_continuation_power=0.7,)
+            smooth_continuation_power=0.7) #smooth_continuation_power s is smaller, the reactivity is higher
 
     def setup(self, n_grid=5):
         dimension = 3
@@ -368,6 +448,31 @@ class ROAM:
 
         #     tree.deformation_rate = deformation_rate.evaluate()
         #     tree.update_deformation(self.dt_simulation)
+    def update_sphere(self, ii: int) -> None:
+        direction_x = np.array([1, 0, 0])
+        direction_y = np.array([0, 1, 0])
+        direction_z = np.array([0, 0, 1])
+
+        idx = self.sphere_1_obstacle_3d.get_obstacle_id_from_name("sphere")
+        obstacle = self.sphere_1_obstacle_3d[idx]
+        position = obstacle.center_position + direction_y * 0.01
+        obstacle.center_position = position
+
+        idx = self.sphere_2_obstacle_3d.get_obstacle_id_from_name("sphere")
+        obstacle = self.sphere_2_obstacle_3d[idx]
+        position = obstacle.center_position -direction_x * 0.012
+        obstacle.center_position = position
+
+        idx = self.sphere_3_obstacle_3d.get_obstacle_id_from_name("sphere")
+        obstacle = self.sphere_3_obstacle_3d[idx]
+        position = obstacle.center_position - direction_y * 0.012
+        obstacle.center_position = position
+        
+        self.sphere_1_obstacle_3d.align_obstacle_tree()
+        self.sphere_2_obstacle_3d.align_obstacle_tree()
+        self.sphere_3_obstacle_3d.align_obstacle_tree()
+
+        self.sphere = True
 
     def update_step(self, ii: int) -> None:
         # from mayavi import mlab
@@ -451,6 +556,28 @@ class LinearMovement:
 
         next_position = (
             (1 - np.cos(self.step)) / 2.0 * self.distance_max * self.direction
+        ) + self.start_position
+
+        return Twist(linear=self.p_factor * (next_position - pose.position))
+
+@dataclass
+class DirectionLinearMovement:
+    start_position: np.ndarray
+    direction: np.ndarray
+    distance_max: float
+
+    # Internal state - to ensure motion
+    step: int = 0
+    frequency: float = 0.1
+
+    p_factor: float = 1
+
+    def evaluate(self, pose):
+        self.step += self.frequency
+        # print("linear step", self.step)
+
+        next_position = (
+            self.distance_max * self.direction
         ) + self.start_position
 
         return Twist(linear=self.p_factor * (next_position - pose.position))
