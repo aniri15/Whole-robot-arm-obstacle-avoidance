@@ -1,0 +1,360 @@
+goal: [0.35786589 0.35651405 0.34708694]
+collision number: 0
+reach_goal: False
+time per step: 1.0688343687057495
+-------------------------------------
+goal: [0.36565071 0.3735509  0.42616273]
+collision number: 0
+reach_goal: False
+time per step: 1.040437255859375
+-------------------------------------
+goal: [0.30877621 0.39176633 0.43689221]
+collision number: 0
+reach_goal: True
+time per step: 0.9965809943407951
+-------------------------------------
+goal: [0.35214855 0.45260124 0.44436256]
+collision number: 0
+reach_goal: False
+time per step: 1.0237894637584686
+-------------------------------------
+goal: [0.37291353 0.49289729 0.31587281]
+collision number: 0
+reach_goal: False
+time per step: 0.8490581111907959
+-------------------------------------
+goal: [0.31874063 0.3809345  0.33502764]
+collision number: 0
+reach_goal: False
+time per step: 1.039199701309204
+-------------------------------------
+goal: [0.39782167 0.46431724 0.32052778]
+collision number: 0
+reach_goal: False
+time per step: 0.8640702757835388
+-------------------------------------
+goal: [0.40298908 0.37523203 0.47379749]
+collision number: 0
+reach_goal: False
+time per step: 1.0420048956871033
+-------------------------------------
+goal: [0.45408901 0.36603963 0.4430254 ]
+collision number: 0
+reach_goal: False
+time per step: 1.0927653844356537
+-------------------------------------
+goal: [0.36630219 0.34177136 0.39867921]
+collision number: 0
+reach_goal: False
+time per step: 1.030634349822998
+-------------------------------------
+goal: [0.38842351 0.39063437 0.4054897 ]
+collision number: 0
+reach_goal: False
+time per step: 1.1449417333602905
+-------------------------------------
+goal: [0.49581754 0.45890576 0.36904564]
+collision number: 0
+reach_goal: False
+time per step: 1.028275176525116
+-------------------------------------
+goal: [0.49205332 0.39251894 0.37631908]
+collision number: 0
+reach_goal: False
+time per step: 1.011759887933731
+-------------------------------------
+goal: [0.43896257 0.44783801 0.48523541]
+collision number: 0
+reach_goal: False
+time per step: 1.032171178817749
+-------------------------------------
+goal: [0.42251312 0.33435032 0.46974203]
+collision number: 0
+reach_goal: False
+time per step: 1.0404084920883179
+-------------------------------------
+goal: [0.419472   0.35348319 0.46523371]
+collision number: 0
+reach_goal: False
+time per step: 0.9991518263816833
+-------------------------------------
+goal: [0.32799182 0.45063055 0.32302235]
+collision number: 0
+reach_goal: False
+time per step: 0.8301445529460907
+-------------------------------------
+goal: [0.39070431 0.39099012 0.48072535]
+collision number: 0
+reach_goal: True
+time per step: 0.9606076545715332
+-------------------------------------
+goal: [0.31377813 0.49940796 0.40928137]
+collision number: 0
+reach_goal: False
+time per step: 0.9734674570560455
+-------------------------------------
+goal: [0.34611912 0.34987983 0.47153873]
+collision number: 0
+reach_goal: True
+time per step: 1.036382006632315
+-------------------------------------
+goal: [0.34621257 0.45889333 0.46793264]
+collision number: 0
+reach_goal: True
+time per step: 1.008064905802409
+-------------------------------------
+goal: [0.48174661 0.44385809 0.43958927]
+collision number: 0
+reach_goal: False
+time per step: 1.0420499005317687
+-------------------------------------
+goal: [0.30457941 0.32145189 0.31879158]
+collision number: 0
+reach_goal: False
+time per step: 1.0028785374164582
+-------------------------------------
+goal: [0.31739767 0.45734655 0.49354938]
+collision number: 0
+reach_goal: True
+time per step: 1.0454729614835796
+-------------------------------------
+goal: [0.44122494 0.47024018 0.30891533]
+collision number: 0
+reach_goal: False
+time per step: 0.8584748568534851
+-------------------------------------
+goal: [0.3562693  0.4363668  0.40178834]
+collision number: 0
+reach_goal: False
+time per step: 0.9623542082309723
+-------------------------------------
+goal: [0.34561337 0.31690082 0.36766416]
+collision number: 0
+reach_goal: False
+time per step: 1.0572053530216217
+-------------------------------------
+goal: [0.34169536 0.33334342 0.46012377]
+collision number: 0
+reach_goal: True
+time per step: 1.057988197663251
+-------------------------------------
+goal: [0.35367305 0.35145869 0.34064051]
+collision number: 0
+reach_goal: False
+time per step: 0.9810483646392822
+-------------------------------------
+goal: [0.39680138 0.4445502  0.47102384]
+collision number: 0
+reach_goal: True
+time per step: 0.9635437416703734
+-------------------------------------
+goal: [0.44158425 0.43983511 0.37304299]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9677801842689514
+-------------------------------------
+goal: [0.44366288 0.47132549 0.36520482]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0452117869853974
+-------------------------------------
+goal: [0.42168526 0.4854904  0.33143684]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9846797878742218
+-------------------------------------
+goal: [0.35288228 0.38751003 0.46679263]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9710475497129487
+-------------------------------------
+goal: [0.33733973 0.48785189 0.42885425]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0040095162391662
+-------------------------------------
+goal: [0.37137785 0.30827357 0.37220489]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0020484945774077
+-------------------------------------
+goal: [0.48489053 0.44316776 0.37914993]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.063106409072876
+-------------------------------------
+goal: [0.40509515 0.35109647 0.444114  ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.060301339149475
+-------------------------------------
+goal: [0.35418693 0.44755391 0.42532819]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0518984922113266
+-------------------------------------
+goal: [0.47690676 0.44161344 0.30179915]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.8472541346549988
+-------------------------------------
+goal: [0.46100156 0.37573707 0.39867014]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0197497255802155
+-------------------------------------
+goal: [0.37775334 0.32230218 0.47011136]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9693751430511475
+-------------------------------------
+goal: [0.49704048 0.49399639 0.31860965]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.8271644036769867
+-------------------------------------
+goal: [0.364072   0.47298413 0.36023177]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.051809808254242
+-------------------------------------
+goal: [0.47836282 0.4730713  0.47265004]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0467959060668945
+-------------------------------------
+goal: [0.37861376 0.36464774 0.46549188]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9697956235221262
+-------------------------------------
+goal: [0.44425799 0.48723519 0.44757612]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9636201152801513
+-------------------------------------
+goal: [0.31061641 0.32700265 0.47501517]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.962382049735533
+-------------------------------------
+goal: [0.39929589 0.49917574 0.43434113]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0396189558506013
+-------------------------------------
+goal: [0.40452317 0.46503285 0.46586165]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9708266212826684
+-------------------------------------
+goal: [0.43713864 0.38611339 0.35650951]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9847413709163666
+-------------------------------------
+goal: [0.42660443 0.36603635 0.44154402]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9785687763690949
+-------------------------------------
+goal: [0.3753015  0.34904621 0.4292502 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.976478968567091
+-------------------------------------
+goal: [0.39799112 0.41611391 0.30619184]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.8464825229644776
+-------------------------------------
+goal: [0.45897849 0.47870403 0.46129984]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0145965905189513
+-------------------------------------
+goal: [0.40942578 0.38737271 0.45713596]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9701667056893403
+-------------------------------------
+goal: [0.41093031 0.3280931  0.43949515]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0466759536266328
+-------------------------------------
+goal: [0.42649141 0.47416606 0.44917401]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.048954931497574
+-------------------------------------
+goal: [0.42030284 0.47513159 0.40309304]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0370218563079834
+-------------------------------------
+goal: [0.41749993 0.40546123 0.4142714 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9796886203289032
+-------------------------------------

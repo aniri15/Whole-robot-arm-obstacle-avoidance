@@ -652,6 +652,11 @@ class FrankaMultiObsEnv_():
     # ---------------------------------------------------------------------------------------------------------------------------------
     '''
     def obstacle_sum_init(self, obstacle_name):
+        if obstacle_name == 'human':
+            self.animator.obstacle_initiation_human()
+            if self.obstacle:
+                self.human_obstacle = self.animator.human_obstacle_3d
+                self.adjust_obstacle_init(self.human_obstacle)
         if obstacle_name == 'human_table':
             self.animator.obstacle_initiation()
             if self.obstacle:
@@ -697,6 +702,10 @@ class FrankaMultiObsEnv_():
                 self.adjust_obstacle_init(self.box_obstacle)
 
     def obstacle_sum_update(self, obstacle_name):
+        if obstacle_name == 'human':
+            if self.obstacle:
+                self.human_obstacle = self.animator.human_obstacle_3d
+                self.adjust_obstacle(self.human_obstacle)
         if obstacle_name == 'human_table':
             if self.obstacle:
                 self.human_obstacle = self.animator.human_obstacle_3d

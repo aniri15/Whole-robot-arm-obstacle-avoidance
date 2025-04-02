@@ -30,11 +30,13 @@ print("scene_path: ", scene_path)
 # goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] good comparision
 # goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] unreachable for norm dir
 goal = np.array([0.3, 0.2, 0.3])
-goal = np.array([0.3, 0.2, 0.6]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
-dynamic_human = False
+goal = np.array([0.49920839, 0.36343747, 0.33879179]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
+#[0.3,0.2,0.6]
+dynamic_human = True
 obstacle = True
 env = FrankaHumanEnv_(scene_path,dynamic_human = dynamic_human, goal = goal, obstacle = obstacle) 
 norm_dir = 2
+env_name = "human_table" # "table_box" or "complex_table" or "human_table" or "cuboid_sphere" or "table" or "human"
 #norm_dir = 0
 #norm_dir = 2
 
@@ -61,7 +63,7 @@ elif norm_dir == 2:
         start_positions = env.get_joints_sensors_end_position()
         print("end_effector_position: ", env.get_ee_position())
         print("goal: ", goal)
-        env.move_franka_robot_sensors_norm_dir(start_positions, goal)
+        env.move_franka_robot_sensors_norm_dir(start_positions, goal,env_name)
     elif obstacle == False:
         start_positions = env.get_joints_end_position()
         print("end_effector_position: ", env.get_ee_position())
@@ -74,6 +76,7 @@ elif norm_dir == 2:
     print("sensors activation number", env.sensors_activation_num)
     print("sensors name: ", env.adjust_sensors_name)
     print("collision name: ", env.collision_name)
+    print("time per step: ", np.mean(env.time_storage))
     #print("velocity average: ", np.mean(env.vel_storage, axis=0))
     env.replay()
 

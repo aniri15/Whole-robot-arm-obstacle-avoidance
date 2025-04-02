@@ -3,6 +3,7 @@ from __future__ import annotations  # To be removed in future python versions
 import numpy as np
 import os
 from envs_.franka_multi_obs_env_ import FrankaMultiObsEnv_
+from envs_.franka_human_env_ import FrankaHumanEnv_
 
 
 
@@ -34,11 +35,13 @@ it = 0
 collision_storage = []
 reach_goal = []
 time_storage = []
+f = open("results.txt", "a")
+
 while it < it_max:
     # randomize the goal in range of [0.4, 0.4, 0.4] to [0.9, 0.9, 0.9]
     print("scenes number: ", it)
-    goal = np.random.rand(3)*0.4 + 0.3
-    env = FrankaMultiObsEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
+    goal = np.random.rand(3)*0.2 + 0.3
+    env = FrankaHumanEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
 
     env_name = "human_table" # "table_box" or "complex_table" or "human_table" or "cuboid_sphere" or "table"
     if obstacle == True:
@@ -70,10 +73,21 @@ while it < it_max:
     print("collision_storage: ", collision_storage)
     print("reach_goal: ", reach_goal)
     print("time_storage: ", time_storage)
+
+    f.write("goal: " + str(goal) + "\n")
+    f.write("scene: " + str(env_name) + "\n")
+    f.write("dynamic: " + str(dynamic_human) + "\n")
+    f.write("collision number: " + str(env.collision_num) + "\n")
+    f.write("reach_goal: " + str(env.reach_goal) + "\n")
+    f.write("time per step: " + str(np.mean(env.time_storage)) + "\n")
+    f.write("-------------------------------------" + "\n")
     it += 1
     #print("velocity average: ", np.mean(env.vel_storage, axis=0))
     #env.replay()
-if len(collision_storage) == len(env.reach_goal):
+
+
+
+if len(collision_storage) == len(reach_goal):
     for i in range(len(collision_storage)):
         print("collision_storage: ", collision_storage[i])
         print("reach_goal: ", reach_goal[i])

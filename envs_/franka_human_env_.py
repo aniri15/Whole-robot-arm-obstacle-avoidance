@@ -16,6 +16,8 @@ from dynamic_obstacle_avoidance.obstacles import EllipseWithAxes as Ellipse
 from scipy.spatial.transform import Rotation as R
 import time
 from itertools import accumulate
+from loop_rate_limiters import RateLimiter
+import mink
 
 DEFAULT_CAMERA_CONFIG = {
     "distance": 1.4,
@@ -70,7 +72,7 @@ class FrankaHumanEnv_():
         # update step size
         self.step_size_position = 0.01
         self.step_size_ik = 0.1 #0.5
-        self.delta_time = 0.01      # 100hz
+        self.delta_time = 0.05      # 100hz
 
         # initialize for ik controller
         self.tol = 0.05   # unit: m, tolerance is 5cm
@@ -95,7 +97,21 @@ class FrankaHumanEnv_():
             'joint5': 0.0092,
             'joint6': 2.4664,
             'joint7': 0.157,
+            'finger_joint1': 0.04,
+            'finger_joint2': 0.04,
         }
+        # self.initial_qpos = {
+        #     #'object0:joint': [1.25, 0.53, 0.4, 1., 0., 0., 0.],#[1.25, 0.53, 0.4, 1., 0., 0., 0.]
+        #     'joint1': 0.144,
+        #     'joint2': -0.5,#-0.2188,
+        #     'joint3': 0.127,
+        #     'joint4': -3.3,#-2.6851,
+        #     'joint5': 0.0092,
+        #     'joint6': 2.4664,
+        #     'joint7': 0.157,
+        #     'finger_joint1': 0.04,
+        #     'finger_joint2': 0.04,
+        # }
         self.rotation_joints = np.array([4]) #np.array([2,4,6])# rotation joints at the 2st, 4rd and 6th joints(at the end of the arms)
         self.rotation_joints_weights = np.array([0.5])
         self.ee_weight = 1
@@ -552,8 +568,13 @@ class FrankaHumanEnv_():
         #sampled_points = self.sample_multiple_points(init_position[1:], num_points=self.sample_points, sample_range= self.sample_range)
         #self.animator.current_position = init_position[1:]
         self.animator.set_up_franka()
-
+        goal_unfeasible =self.check_collision()
+        
         for ii in range(it_max):
+            if goal_unfeasible:
+                print("goal position is inside the obstacle")
+                print("Reset the goal position !!")
+                break
             time_start = time.time()
             velocity= self.animator.run_norm(ii=ii)
             print('iteration: ', ii)
@@ -712,21 +733,28 @@ class FrankaHumanEnv_():
     #-----------------------------------------------------------------------------------------------------------------------------------
     '''
 
-    def move_franka_robot_sensors_norm_dir(self,init_position, goal):
+    def move_franka_robot_sensors_norm_dir(self,init_position, goal,env_name):
         it_max = self.it_max
+        self.reach_goal = False
         #sampled_points = init_position[1:]
         self.animator = MayaviAnimator(it_max=it_max, current_position=init_position, 
                                   attractor_position=goal, dynamic_human=self.dynamic_human, obstacle=self.obstacle)    
-        self.animator.obstacle_initiation()
-        if self.obstacle:
-            self.human_obstacle = self.animator.human_obstacle_3d
-            self.adjust_obstacle_init()
+        # self.animator.obstacle_initiation()
+        # if self.obstacle:
+        #     self.human_obstacle = self.animator.human_obstacle_3d
+        #     self.adjust_obstacle_init()
+        self.obstacle_sum_init(env_name)
         # self.human_obstacle = self.animator.human_obstacle_3d
         # self.adjust_obstacle_init()
         next_desired_pos = []
         self.animator.set_up_franka()
-
+        goal_unfeasible =self.check_collision()
+        
         for ii in range(it_max):
+            if goal_unfeasible:
+                print("goal position is inside the obstacle")
+                print("Reset the goal position !!")
+                break
             time_start = time.time()
             #velocity_reference = self.get_sensors_velocity()
             velocity= self.animator.run_norm(ii=ii)
@@ -743,16 +771,19 @@ class FrankaHumanEnv_():
             init_position = self.get_joints_sensors_end_position()
 
             self.animator.update_multiple_points_trajectories(init_position, ii)
-            if self.obstacle:
-                self.human_obstacle = self.animator.human_obstacle_3d
-                self.adjust_obstacle()
+            # if self.obstacle:
+            #     self.human_obstacle = self.animator.human_obstacle_3d
+            #     self.adjust_obstacle()
+            self.obstacle_sum_update(env_name)
             time_end = time.time()
+            self.time_storage.append(time_end - time_start)
             print("time_diff: ", time_end - time_start)
             #self.adjust_obstacle()
             
             ee_position = self.get_ee_position()
             if self.check_goal_reach(ee_position, goal):
                 print("goal reached")
+                self.reach_goal = True
                 break
             print("--------------------------------------------")
 
@@ -787,7 +818,7 @@ class FrankaHumanEnv_():
             
             for i in range(q_vel_joints.shape[1]):
                 if np.all(q_vel_avoid == 0):
-                    self.data.qvel = q_vel_convergence*self.ee_weight + q_vel_joints[:,i] * self.rotation_joints_weights[i]
+                    self.data.qvel = q_vel_convergence#*self.ee_weight + q_vel_joints[:,i] * self.rotation_joints_weights[i]
                     #self.data.qvel = q_vel_convergence
                 else:
                     #self.data.qvel = q_vel_avoid * 0.5 + q_vel_convergence*0.25 + q_vel_joints[:,i] * 0.25
@@ -816,6 +847,101 @@ class FrankaHumanEnv_():
     # --------------------------------------------------- assistive functions ---------------------------------------------------------
     # ---------------------------------------------------------------------------------------------------------------------------------
     '''
+    def obstacle_sum_init(self, obstacle_name):
+        if obstacle_name == 'human':
+            self.animator.obstacle_initiation_human()
+            if self.obstacle:
+                self.human_obstacle = self.animator.human_obstacle_3d
+                self.adjust_obstacle_init(self.human_obstacle)
+        if obstacle_name == 'human_table':
+            self.animator.obstacle_initiation()
+            if self.obstacle:
+                self.human_obstacle = self.animator.human_obstacle_3d
+                self.table_obstacle = self.animator.table_obstacle_3d
+                self.adjust_obstacle_init(self.human_obstacle)
+                self.adjust_obstacle_init(self.table_obstacle)
+        elif obstacle_name == 'table_box':
+            self.animator.obstacle_initiation_table_box()
+            if self.obstacle:
+                self.table_obstacle = self.animator.table_obstacle_3d
+                self.box_obstacle = self.animator.box_obstacle_3d
+                self.adjust_obstacle_init(self.table_obstacle)
+                self.adjust_obstacle_init(self.box_obstacle)
+        elif obstacle_name == 'complex_table':
+            self.animator.obstacle_initiation_table_multiobs()
+            if self.obstacle:
+                self.table_obstacle = self.animator.table_obstacle_3d
+                self.cross_obstacle = self.animator.cross_obstacle_3d
+                self.concave_obstacle = self.animator.concave_word_obstacle_3d
+                self.star_obstacle = self.animator.star_shape_obstacle_3d
+                self.adjust_obstacle_init(self.table_obstacle)
+                self.adjust_obstacle_init(self.cross_obstacle)
+                self.adjust_obstacle_init(self.concave_obstacle)
+                self.adjust_obstacle_init(self.star_obstacle)
+        elif obstacle_name == 'cuboid_sphere':
+            self.animator.obstacle_initiation_cuboid_sphere()
+            if self.obstacle:
+                self.cuboid_obstacle = self.animator.cuboid_obstacle_3d
+                self.sphere1_obstacle = self.animator.sphere_1_obstacle_3d
+                self.sphere2_obstacle = self.animator.sphere_2_obstacle_3d
+                self.sphere3_obstacle = self.animator.sphere_3_obstacle_3d
+                self.adjust_obstacle_init(self.cuboid_obstacle)
+                self.adjust_obstacle_init(self.sphere1_obstacle)
+                self.adjust_obstacle_init(self.sphere2_obstacle)
+                self.adjust_obstacle_init(self.sphere3_obstacle)
+        elif obstacle_name == 'table':
+            self.animator.obstacle_initiation_table()
+            if self.obstacle:
+                self.table_obstacle = self.animator.table_obstacle_3d
+                #self.box_obstacle = self.animator.box_obstacle_3d
+                self.adjust_obstacle_init(self.table_obstacle)
+                #self.adjust_obstacle_init(self.box_obstacle)
+
+    def obstacle_sum_update(self, obstacle_name):
+        if obstacle_name == 'human':
+            if self.obstacle:
+                self.human_obstacle = self.animator.human_obstacle_3d
+                self.adjust_obstacle(self.human_obstacle)
+        if obstacle_name == 'human_table':
+            if self.obstacle:
+                self.human_obstacle = self.animator.human_obstacle_3d
+                self.table_obstacle = self.animator.table_obstacle_3d
+                self.adjust_obstacle(self.human_obstacle)
+                self.adjust_obstacle(self.table_obstacle)
+        elif obstacle_name == 'table_box':
+            if self.obstacle:
+                self.table_obstacle = self.animator.table_obstacle_3d
+                self.box_obstacle = self.animator.box_obstacle_3d
+                self.adjust_obstacle(self.table_obstacle)
+                self.adjust_obstacle(self.box_obstacle)
+        elif obstacle_name == 'complex_table':
+            if self.obstacle:
+                self.table_obstacle = self.animator.table_obstacle_3d
+                self.cross_obstacle = self.animator.cross_obstacle_3d
+                self.concave_obstacle = self.animator.concave_word_obstacle_3d
+                self.star_obstacle = self.animator.star_shape_obstacle_3d
+                self.adjust_obstacle(self.table_obstacle)
+                self.adjust_obstacle(self.cross_obstacle)
+                self.adjust_obstacle(self.concave_obstacle)
+                self.adjust_obstacle(self.star_obstacle)
+        elif obstacle_name == 'cuboid_sphere':
+            if self.obstacle:
+                self.cuboid_obstacle = self.animator.cuboid_obstacle_3d
+                self.sphere1_obstacle = self.animator.sphere_1_obstacle_3d
+                self.sphere2_obstacle = self.animator.sphere_2_obstacle_3d
+                self.sphere3_obstacle = self.animator.sphere_3_obstacle_3d
+                self.adjust_obstacle(self.cuboid_obstacle)
+                self.adjust_obstacle(self.sphere1_obstacle)
+                self.adjust_obstacle(self.sphere2_obstacle)
+                self.adjust_obstacle(self.sphere3_obstacle)
+        elif obstacle_name == 'table':
+            if self.obstacle:
+                self.table_obstacle = self.animator.table_obstacle_3d
+                #self.box_obstacle = self.animator.box_obstacle_3d
+                self.adjust_obstacle(self.table_obstacle)
+                #self.adjust_obstacle(self.box_obstacle)
+
+
 
     def desired_velocity(self, velocity):
         #velocity = np.linalg.norm(error)
@@ -979,6 +1105,7 @@ class FrankaHumanEnv_():
                     rgba = np.array([0.8, 0.8, 0.7, 0.1], dtype=np.float32)  # 4-element float array
 
                     # Initialize geometry
+                    # Add a new geometry to the viewer if the number of geometries does not exceed the limit
                     viewer.user_scn.ngeom+=1
                     mujoco.mjv_initGeom(
                         viewer.user_scn.geoms[viewer.user_scn.ngeom-1],
@@ -1018,6 +1145,85 @@ class FrankaHumanEnv_():
     # --------------------------------------------- qpos calculation -------------------------------------------------------------------------
     # -----------------------------------------------------------------------------------------------------------------------------------------
     '''
+    def converge_ik(configuration, tasks, dt, solver, pos_threshold, ori_threshold, max_iters):
+        """
+        Runs up to 'max_iters' of IK steps. Returns True if position and orientation
+        are below thresholds, otherwise False.
+        """
+        for _ in range(max_iters):
+            vel = mink.solve_ik(configuration, tasks, dt, solver, 1e-3)
+            configuration.integrate_inplace(vel, dt)
+
+            # Only checking the first FrameTask here (end_effector_task). 
+            # If you want to check multiple tasks, sum or combine their errors.
+            err = tasks[0].compute_error(configuration)
+            pos_achieved = np.linalg.norm(err[:3]) <= pos_threshold
+            ori_achieved = np.linalg.norm(err[3:]) <= ori_threshold
+
+            if pos_achieved and ori_achieved:
+                return True
+        return False
+
+    def mink_ik(self):
+        # IK parameters
+        SOLVER = "quadprog"
+        POS_THRESHOLD = 1e-4
+        ORI_THRESHOLD = 1e-4
+        MAX_ITERS = 20
+
+        # Create a Mink configuration
+        configuration = mink.Configuration(self.model)
+
+        # Define tasks
+        end_effector_task = mink.FrameTask(
+            frame_name="attachment_site",
+            frame_type="site",
+            position_cost=1.0,
+            orientation_cost=1.0,
+            lm_damping=1.0,
+        )
+        posture_task = mink.PostureTask(model=self.model, cost=1e-2)
+        tasks = [end_effector_task, posture_task]
+
+        
+        configuration.update(self.data.qpos)
+        posture_task.set_target_from_configuration(configuration)
+        mujoco.mj_forward(self.model, self.data)
+
+        # Move the mocap target to the end-effector's current pose
+        mink.move_mocap_to_frame(self.model, self.data, "intergoal_site", "attachment_site", "site")
+        initial_target_position = self.data.mocap_pos[0].copy()
+
+        # Circular trajectory parameters
+        amp = 0.12
+        freq = 0.4
+
+        # We'll track time ourselves for a smoother trajectory
+        local_time = 0.0
+        rate = RateLimiter(frequency=200.0, warn=False)
+
+           
+        # Update our local time
+        dt = rate.dt
+        local_time += dt
+
+        
+        self.data.mocap_pos[0] = initial_target_position
+
+        # Update the end effector task target from the mocap body
+        T_wt = mink.SE3.from_mocap_name(self.model, self.data, "target")
+        end_effector_task.set_target(T_wt)
+
+        # Attempt to converge IK
+        converged = self.converge_ik(configuration, tasks, dt, SOLVER,
+                                POS_THRESHOLD, ORI_THRESHOLD, MAX_ITERS)
+
+        # Set robot controls (first 8 dofs in your configuration)
+        self.data.ctrl = configuration.q[:8]
+
+        # Step simulation
+        mujoco.mj_step(self.model, self.data)
+        return self.data.ctrl[:8]
 
     def get_ee_qpos(self,body_id,ref_vel):
         jac = np.zeros((6, self.model.nv))
@@ -1222,10 +1428,10 @@ class FrankaHumanEnv_():
     # -------------------------------------------------build object-----------------------------------------------------
     # --------------------------------------------------------------------------------------------------------------------
     '''
-    def adjust_obstacle(self):
+    def adjust_obstacle(self,obstacles):
         # set the initial position, size and orientation of the obstacles
         #print('------------------------------------------------------')
-        obstacles = self.human_obstacle
+        #obstacles = self.human_obstacle
         for ii, obs in enumerate(obstacles):
             if isinstance(obs, Ellipse):
                 orientation = [0,0,0]
@@ -1273,10 +1479,10 @@ class FrankaHumanEnv_():
         
         #self.model = self.spec.compile()
 
-    def adjust_obstacle_init(self):
+    def adjust_obstacle_init(self,obstacles):
         # set the initial position, size and orientation of the obstacles
         i = 0
-        obstacles = self.human_obstacle
+        #obstacles = self.human_obstacle
         for ii, obs in enumerate(obstacles):
             if isinstance(obs, Ellipse):
                 orientation = [0,0,0]
@@ -1333,7 +1539,7 @@ class FrankaHumanEnv_():
                 #         size= size)
                 self.spec.worldbody.add_geom(name= name +'_geom',
                         type=mujoco.mjtGeom.mjGEOM_BOX,
-                        rgba=[1, 0, 0, 1],
+                        rgba=[0.7, 0.7, 0.7, 1],
                         size= size,
                         pos= position)
         self.model = self.spec.compile()
@@ -1357,7 +1563,7 @@ class FrankaHumanEnv_():
         #mujoco.mj_forward(self.model, self.data)
 
 
-    def build_sensor_points(self):
+    def build_sensor_points_old(self):
         ''' attach multiple points to the robot arms, in order to use them for obstacle avoidance method later
         '''
         self.link_names = ['link2_sensor_1','link2_sensor_2','link4_sensor_1','link5_sensor_1', 'link5_sensor_2','link5_sensor_3', 'link7_sensor_1']
@@ -1657,7 +1863,309 @@ class FrankaHumanEnv_():
         self.model = self.spec.compile()
         #print(self.spec.to_xml())
         self.data = mujoco.MjData(self.model)
+    def build_sensor_points(self):
+        ''' attach multiple points to the robot arms, in order to use them for obstacle avoidance method later
+        '''
+        self.link_names = ['link2_sensor_1','link2_sensor_2','link4_sensor_1','link5_sensor_1', 'link5_sensor_2','link5_sensor_3', 'link7_sensor_1']
+        #self.link_names = ['link4_sensor_1','link5_sensor_1', 'link5_sensor_2','link5_sensor_3', 'link7_sensor_1']
+        self.hand_names = ['link7_sensor_2']
+        self.sensors_on_links = []
+        links_radius = []
+        links_length = []
+        links_center = []
+        links_interval = []
+        links_quat = []
+        offsets = []
+        vertex_ = []
+        syme = 1
+        total_body_sensors_num = 0
+        total_hand_sensors_num = 0
 
+        hand_offests = []
+        hand_quats = []
+        
+        #print("total_sensors: ", self.total_sensors)
+        for i in range(len(self.link_names)):
+            size = self.get_site_size(self.link_names[i])
+            link_radius = size[0]
+            link_length = size[1]
+            link_center = self.get_body_xpos(self.link_names[i])
+            link_interval = (link_length) / 2
+            link_quat = self.get_site_quat(self.link_names[i])
+            x_ = link_radius * np.sin(np.pi/3)
+            y_ = link_radius * np.cos(np.pi/3)
+            #offset = [[link_radius, 0, 0], [0, link_radius, 0], [-link_radius, 0, 0], [0, -link_radius, 0]]
+            offset = [[0, -link_radius, 0], [x_, y_, 0], [-x_, y_, 0]]
+            #offset = [[0, -link_radius, 0], [link_radius,0 ,0]]
+            vertex = [[0, 0, link_length+link_radius], [0, 0, -link_length-link_radius]]
+            links_radius.append(link_radius)
+            links_length.append(link_length)
+            links_center.append(link_center)
+            links_interval.append(link_interval)
+            offsets.append(offset)
+            links_quat.append(link_quat)
+            vertex_.append(vertex)
+            # print("links_radius: ", link_radius)
+            # print("links_length: ", link_length)
+            # print("links_center: ", link_center)
+            # print("links_interval: ", link_interval)
+            # print("links_quat: ", link_quat)
+            # print("offsets: ", offset)
+            # print("------------------")
+        #breakpoint()
+        for u in range(len(self.hand_names)):
+            size = self.get_site_size(self.hand_names[u])
+            hand_quat = self.get_site_quat(self.hand_names[u])
+            axis_x = size[0]
+            axis_y = size[1]
+            axis_z = size[2]
+            offset_ = [#[axis_x, 0, 0], [0, axis_y, 0], [0, 0, axis_z], [-axis_x, 0, 0], [0, -axis_y, 0], [0, 0, -axis_z],
+                      [axis_x, axis_y, axis_z], [axis_x, -axis_y, axis_z], [-axis_x, axis_y, axis_z], [-axis_x, -axis_y, axis_z],
+                      [axis_x, axis_y, -axis_z], [axis_x, -axis_y, -axis_z], [-axis_x, axis_y, -axis_z], [-axis_x, -axis_y, -axis_z]]
+            hand_offests.append(offset_)
+            hand_quats.append(hand_quat)
+
+
+        # self.total_sensors = (1*len(offset)+ (syme-1)*2*len(offset)+2)*len(self.link_names)
+        # self.total_sensors_hand = len(offset_)*len(self.hand_names)
+        # #self.total_sensors += len(hand_offests[0])
+        # print("total_sensors: ", self.total_sensors + self.total_sensors_hand)
+        size = [0.005,0.005,0.005]
+        self.totoal_j_l2p = []
+        self.hand_j_l2p = []
+
+        # for i in range(len(self.link_names)):
+        #     body = self.spec.find_body(self.link_names[i])
+        #     j_l2p_ = []
+        #     #body = self.spec.body(link_names[i])
+        #     num = 1
+        #     for j in range(syme):
+        #         if j == 0:
+        #             offset = offsets[i]
+        #             for point, offset_ in enumerate(offset):
+        #                 #print(f"{link_names[i]}_point{num}")
+        #                 #self.set_geom_xpos(f"{link_names[i]}_point{num}", offset_)
+        #                 #self.set_geom_quat(f"{link_names[i]}_point{num}", quat=links_quat[i])
+        #                 body.add_site(name=f"{self.link_names[i]}_point{num}",
+        #                               size= size,
+        #                               pos= offset_,
+        #                               quat= links_quat[i],
+        #                               rgba= [1,0,0,1])
+        #                 num += 1
+
+        #                 j_l2p = np.zeros((3,6))
+        #                 pos_l2p = offset_
+        #                 transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+        #                 hat_transl = self.skew_symmetric(transl)
+        #                 j_l2p[:,0:3] = np.eye(3)
+        #                 j_l2p[:,3:6] = -hat_transl
+        #                 j_l2p_.append(j_l2p)
+        #         else:
+        #             offset = offsets[i]
+        #             for point, offset_ in enumerate(offset):
+        #                 for sign in [-1, 1]:  # Place at -i*interval and i*interval
+                            
+        #                     pos = [offset_[0], offset_[1], offset_[2]+sign * j * links_interval[i]]
+        #                     #self.set_geom_xpos(f"{link_names[i]}_point{num}", pos)
+        #                     #self.set_geom_quat(f"{link_names[i]}_point{num}", links_quat[i])
+        #                     body.add_site(name=f"{self.link_names[i]}_point{num}",
+        #                               size=size,
+        #                               pos= pos,
+        #                               quat= links_quat[i],
+        #                               rgba= [1,0,0,1])
+        #                     num += 1
+
+        #                     j_l2p = np.zeros((3,6))
+        #                     pos_l2p = pos
+        #                     transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+        #                     hat_transl = self.skew_symmetric(transl)
+        #                     j_l2p[:,0:3] = np.eye(3)
+        #                     j_l2p[:,3:6] = -hat_transl
+        #                     j_l2p_.append(j_l2p)
+        #         if j == syme-1:
+        #             for point, vertex in  enumerate(vertex_[i]):
+        #                 body.add_site(name=f"{self.link_names[i]}_point{num}",
+        #                                     size= size,
+        #                                     pos= vertex,
+        #                                     quat= links_quat[i],
+        #                                     rgba= [1,0,0,1])
+        #                 num += 1
+
+        #                 j_l2p = np.zeros((3,6))
+        #                 pos_l2p = vertex
+        #                 transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+        #                 hat_transl = self.skew_symmetric(transl)
+        #                 j_l2p[:,0:3] = np.eye(3)
+        #                 j_l2p[:,3:6] = -hat_transl
+        #                 j_l2p_.append(j_l2p)
+        #     self.totoal_j_l2p.append(j_l2p_)
+
+        for i in range(len(self.link_names)):
+            body = self.spec.find_body(self.link_names[i])
+            j_l2p_ = []
+            #body = self.spec.body(link_names[i])
+            num = 1
+            if self.link_names[i] in ["link2_sensor_1", "link5_sensor_3"] :
+                for point, vertex in  enumerate(vertex_[i]):
+                        body.add_site(name=f"{self.link_names[i]}_point{num}",
+                                            size= size,
+                                            pos= vertex,
+                                            quat= links_quat[i],
+                                            rgba= [1,0,0,1])
+                        num += 1
+                        total_body_sensors_num += 1
+
+                        j_l2p = np.zeros((3,6))
+                        pos_l2p = vertex
+                        transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+                        hat_transl = self.skew_symmetric(transl)
+                        j_l2p[:,0:3] = np.eye(3)
+                        j_l2p[:,3:6] = -hat_transl
+                        j_l2p_.append(j_l2p)
+
+            elif self.link_names[i] in ["link2_sensor_2", "link5_sensor_1", "link5_sensor_2"]:
+                for j in range(syme):
+                    if j == 0:
+                        offset = offsets[i]
+                        for point, offset_ in enumerate(offset):
+                            #print(f"{link_names[i]}_point{num}")
+                            #self.set_geom_xpos(f"{link_names[i]}_point{num}", offset_)
+                            #self.set_geom_quat(f"{link_names[i]}_point{num}", quat=links_quat[i])
+                            body.add_site(name=f"{self.link_names[i]}_point{num}",
+                                        size= size,
+                                        pos= offset_,
+                                        quat= links_quat[i],
+                                        rgba= [1,0,0,1])
+                            num += 1
+                            total_body_sensors_num += 1
+
+                            j_l2p = np.zeros((3,6))
+                            pos_l2p = offset_
+                            transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+                            hat_transl = self.skew_symmetric(transl)
+                            j_l2p[:,0:3] = np.eye(3)
+                            j_l2p[:,3:6] = -hat_transl
+                            j_l2p_.append(j_l2p)
+                    else:
+                        offset = offsets[i]
+                        for point, offset_ in enumerate(offset):
+                            for sign in [-1, 1]:  # Place at -i*interval and i*interval
+                                
+                                pos = [offset_[0], offset_[1], offset_[2]+sign * j * links_interval[i]]
+                                #self.set_geom_xpos(f"{link_names[i]}_point{num}", pos)
+                                #self.set_geom_quat(f"{link_names[i]}_point{num}", links_quat[i])
+                                body.add_site(name=f"{self.link_names[i]}_point{num}",
+                                        size=size,
+                                        pos= pos,
+                                        quat= links_quat[i],
+                                        rgba= [1,0,0,1])
+                                num += 1
+                                total_body_sensors_num += 1
+
+                                j_l2p = np.zeros((3,6))
+                                pos_l2p = pos
+                                transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+                                hat_transl = self.skew_symmetric(transl)
+                                j_l2p[:,0:3] = np.eye(3)
+                                j_l2p[:,3:6] = -hat_transl
+                                j_l2p_.append(j_l2p)
+            else:
+                for j in range(syme):
+                    if j == 0:
+                        offset = offsets[i]
+                        for point, offset_ in enumerate(offset):
+                            #print(f"{link_names[i]}_point{num}")
+                            #self.set_geom_xpos(f"{link_names[i]}_point{num}", offset_)
+                            #self.set_geom_quat(f"{link_names[i]}_point{num}", quat=links_quat[i])
+                            body.add_site(name=f"{self.link_names[i]}_point{num}",
+                                        size= size,
+                                        pos= offset_,
+                                        quat= links_quat[i],
+                                        rgba= [1,0,0,1])
+                            num += 1
+                            total_body_sensors_num += 1
+
+                            j_l2p = np.zeros((3,6))
+                            pos_l2p = offset_
+                            transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+                            hat_transl = self.skew_symmetric(transl)
+                            j_l2p[:,0:3] = np.eye(3)
+                            j_l2p[:,3:6] = -hat_transl
+                            j_l2p_.append(j_l2p)
+                    else:
+                        offset = offsets[i]
+                        for point, offset_ in enumerate(offset):
+                            for sign in [-1, 1]:  # Place at -i*interval and i*interval
+                                
+                                pos = [offset_[0], offset_[1], offset_[2]+sign * j * links_interval[i]]
+                                #self.set_geom_xpos(f"{link_names[i]}_point{num}", pos)
+                                #self.set_geom_quat(f"{link_names[i]}_point{num}", links_quat[i])
+                                body.add_site(name=f"{self.link_names[i]}_point{num}",
+                                        size=size,
+                                        pos= pos,
+                                        quat= links_quat[i],
+                                        rgba= [1,0,0,1])
+                                num += 1
+                                total_body_sensors_num += 1
+
+                                j_l2p = np.zeros((3,6))
+                                pos_l2p = pos
+                                transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+                                hat_transl = self.skew_symmetric(transl)
+                                j_l2p[:,0:3] = np.eye(3)
+                                j_l2p[:,3:6] = -hat_transl
+                                j_l2p_.append(j_l2p)
+                    if j == syme-1:
+                        for point, vertex in  enumerate(vertex_[i]):
+                            body.add_site(name=f"{self.link_names[i]}_point{num}",
+                                                size= size,
+                                                pos= vertex,
+                                                quat= links_quat[i],
+                                                rgba= [1,0,0,1])
+                            num += 1
+                            total_body_sensors_num += 1
+
+                            j_l2p = np.zeros((3,6))
+                            pos_l2p = vertex
+                            transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+                            hat_transl = self.skew_symmetric(transl)
+                            j_l2p[:,0:3] = np.eye(3)
+                            j_l2p[:,3:6] = -hat_transl
+                            j_l2p_.append(j_l2p)
+            self.sensors_on_links.append(num-1)
+            self.totoal_j_l2p.append(j_l2p_)
+
+        for u in range(len(self.hand_names)):
+            body = self.spec.find_body(self.hand_names[u])
+            num = 1
+            offset = hand_offests[u]
+            for point, offset_ in enumerate(offset):
+                body.add_site(name=f"{self.hand_names[u]}_point{num}",
+                                      size= size,
+                                      pos= offset_,
+                                      quat= hand_quats[u],
+                                      rgba= [1,0,0,1])
+                num += 1
+                total_hand_sensors_num += 1
+                j_l2p = np.zeros((3,6))
+                pos_l2p = offset_
+                transl = np.array([pos_l2p[0], pos_l2p[1], pos_l2p[2]])
+                hat_transl = self.skew_symmetric(transl)
+                j_l2p[:,0:3] = np.eye(3)
+                j_l2p[:,3:6] = -hat_transl
+                self.hand_j_l2p.append(j_l2p)
+
+        self.total_sensors = total_body_sensors_num
+        self.total_sensors_hand = total_hand_sensors_num
+        #self.total_sensors += len(hand_offests[0])
+        print("total_sensors: ", self.total_sensors + self.total_sensors_hand)
+        #self.total_j_l2p = np.array(self.totoal_j_l2p)
+        self.hand_j_l2p = np.array(self.hand_j_l2p)
+        #print("total_j_l2p: ", self.total_j_l2p.shape)
+        #print("hand_j_l2p: ", self.hand_j_l2p.shape)
+        self.model = self.spec.compile()
+        #print(self.spec.to_xml())
+        self.data = mujoco.MjData(self.model)
         
     '''
     # ------------------------------------------read from model and data ----------------------------------------

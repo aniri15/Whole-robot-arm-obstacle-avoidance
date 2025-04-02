@@ -94,6 +94,28 @@ class ROAM:
             self.update_human(ii)
         return velocities
 
+    def obstacle_initiation_human(self):
+        # step1 create container of obstacles
+        self.container = MultiObstacleContainer()
+        if self.obstacle:
+            # step2 create tree of obstacles
+            human_obs_root_position = np.array([0.4, -0.2, 0.25])
+            table_obs_root_position = np.array([0.5, 0.6, 0.25])
+            self.human_obstacle_3d = create_3d_human(human_obs_root_position)
+            #self.table_obstacle_3d = create_3d_table(table_obs_root_position)
+            
+            # step3 transform tree of obstacles to multiobstacle????
+            transformed_human = transform_from_multibodyobstacle_to_multiobstacle(
+                self.human_obstacle_3d
+            )
+            # transformed_table = transform_from_multibodyobstacle_to_multiobstacle(
+            #     self.table_obstacle_3d
+            # )
+            self.container.append(transformed_human)
+            #self.container.append(transformed_table)
+
+            self.human = True
+
     def obstacle_initiation(self):
         # step1 create container of obstacles
         self.container = MultiObstacleContainer()
@@ -181,7 +203,7 @@ class ROAM:
                 self.box_obstacle_3d
             )
             self.container.append(transformed_table)
-            self.container.append(transformed_box)
+            #self.container.append(transformed_box)
 
 
     def obstacle_initiation_table_multiobs(self):
@@ -247,6 +269,7 @@ class ROAM:
 
             #self.human_obstacle_3d = create_3d_human(human_obs_root_position)
             self.cuboid_obstacle_3d = create_3d_cuboid(cuboid_obs_root_position)
+            #self.cuboid_obstacle_3d = create_3d_table(cuboid_obs_root_position)
             self.sphere_1_obstacle_3d = create_3d_sphere(sphere_1_obs_root_position)
             self.sphere_2_obstacle_3d = create_3d_sphere(sphere_2_obs_root_position)
             self.sphere_3_obstacle_3d = create_3d_sphere(sphere_3_obs_root_position)

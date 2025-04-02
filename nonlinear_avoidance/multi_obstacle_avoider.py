@@ -894,7 +894,7 @@ class MultiObstacleAvoider:
 
             # Normalize weights
             obstacle_weights = obstacle_weights[obstacle_weights > 0]
-            if len(obstacle_weights):
+            if len(obstacle_weights)> 1:
                 obstacle_weights = obstacle_weights / np.sum(obstacle_weights)
             else:
                 # At least one weight should be added
