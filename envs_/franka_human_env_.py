@@ -67,12 +67,12 @@ class FrankaHumanEnv_():
         self.camera = mujoco.MjvCamera()
         mujoco.mjv_defaultFreeCamera(self.model, self.camera)
         self.camera.distance = 4
-        self.it_max = 1000             #horizon
+        self.it_max = 500             #horizon
 
         # update step size
         self.step_size_position = 0.01
         self.step_size_ik = 0.1 #0.5
-        self.delta_time = 0.05      # 100hz
+        self.delta_time = 0.01      # 100hz
 
         # initialize for ik controller
         self.tol = 0.05   # unit: m, tolerance is 5cm
@@ -124,13 +124,31 @@ class FrankaHumanEnv_():
         self.adjust_sensors_name = []
         self.collision_name = []
         self.collision_num = 0
-    
+
+        
         #self.initial_simulation()
         self.bulid_goal_object(goal)
+        self.build_inter_goal_object(goal)
         self.build_sensor_points()
         self.collision_visualization()
         self.initial_simulation()
+        self.initial_ik()
+        #self.set_body_pos("intergoal", self.goal)
         
+    def initial_ik(self):
+        # initial ik configuration
+        self.configuration = mink.Configuration(self.model)
+        # Define tasks
+        self.end_effector_task = mink.FrameTask(
+            frame_name="attachment_site",
+            frame_type="site",
+            position_cost=1.0,
+            orientation_cost=1.0,
+            lm_damping=1.0,
+        )
+        self.posture_task = mink.PostureTask(model=self.model, cost=1e-2)
+        self.tasks = [self.end_effector_task, self.posture_task]
+
     def initial_simulation(self):
         for name, value in self.initial_qpos.items():
             self._utils.set_joint_qpos(self.model, self.data, name, value)
@@ -549,21 +567,23 @@ class FrankaHumanEnv_():
     #-----------------------------------move ee and joints in tangent and norm direction--------------------------------
     #-----------------------------------------------------------------------------------------------------------------------------------
     '''
-    def move_franka_robot_norm_dir(self,init_position, goal):
+    def move_franka_robot_norm_dir(self,init_position, goal,env_name):
         #self.mujoco_renderer.render(self.render_mode)
         it_max = self.it_max
+        self.reach_goal = False
         #sampled_points = self.sample_multiple_points(init_position, num_points=3, sample_range= 0.05)
         #print("init_position: ", init_position)
         #sampled_points = init_position[1:]
         sampled_points = init_position
         self.animator = MayaviAnimator(it_max=it_max, current_position=sampled_points, 
                                   attractor_position=goal, dynamic_human=self.dynamic_human, obstacle=self.obstacle)    
-        self.animator.obstacle_initiation()
-        if self.obstacle:
-            self.human_obstacle = self.animator.human_obstacle_3d
-            #self.table_obstacle = self.animator.table_obstacle_3d
-            self.adjust_obstacle_init()
+        #self.animator.obstacle_initiation()
+        # if self.obstacle:
+        #     self.human_obstacle = self.animator.human_obstacle_3d
+        #     #self.table_obstacle = self.animator.table_obstacle_3d
+        #     self.adjust_obstacle_init()
         #self.animator.dynamic_human = self.dynamic_human
+        self.obstacle_sum_init(env_name)
         next_desired_pos = []
         #sampled_points = self.sample_multiple_points(init_position[1:], num_points=self.sample_points, sample_range= self.sample_range)
         #self.animator.current_position = init_position[1:]
@@ -592,9 +612,10 @@ class FrankaHumanEnv_():
             sampled_points = init_position
 
             self.animator.update_multiple_points_trajectories(sampled_points, ii)
-            if self.obstacle:
-                self.human_obstacle = self.animator.human_obstacle_3d
-                self.adjust_obstacle()
+            # if self.obstacle:
+            #     self.human_obstacle = self.animator.human_obstacle_3d
+            #     self.adjust_obstacle()
+            self.obstacle_sum_update(env_name)
             #self.human_obstacle = self.animator.human_obstacle_3d
             time_end = time.time()
             print("time_diff: ", time_end - time_start)
@@ -603,6 +624,7 @@ class FrankaHumanEnv_():
             ee_position = self.get_ee_position()
             if self.check_goal_reach(ee_position, goal):
                 print("goal reached")
+                self.reach_goal = True
                 break
 
     def joints_resolved_rate_motion_control_norm_dir(self, goal, velocity):
@@ -624,7 +646,7 @@ class FrankaHumanEnv_():
         for i in range(len(self.rotation_joints)):
             print("joint position", self.get_body_xpos(f'link{self.rotation_joints[i]}'))
         
-    def joint_velocity_control(self, goal, velocity, init_q, body_id, joints_id):
+    def joint_velocity_control_old(self, goal, velocity, init_q, body_id, joints_id):
         """velocity: desired velocity of joint 4 and end effector
         goal: desired position of joint 4 and end effector
         """
@@ -728,6 +750,41 @@ class FrankaHumanEnv_():
             #print("time_diff: ", time_diff) 
         return self.data
     
+    def joint_velocity_control(self, goal, velocity, init_q, body_id, joints_id):
+        self.data.qpos = init_q
+        #mujoco.mj_forward(self.model, self.data)
+        mujoco.mj_step(self.model, self.data)
+        self.store_data()
+        jac = np.zeros((6, self.model.nv))
+        ref_vel = velocity[-1]
+        joints_vel = velocity[:-1]
+        time_start = self.data.time
+        time_end = 0
+        time_diff = 0
+        q_vel_convergence = self.get_ee_qpos(body_id, ref_vel)
+        q_vel_joints = self.get_joints_qpos(self.rotation_joints, goal, joints_vel)
+
+        while (np.linalg.norm(time_diff)<= self.delta_time):
+            joint_weights = np.array(self.animator.weights_sensors)[:len(joints_id),:]
+            joints_weights = joint_weights[:,:-1]
+            # if np.any(joints_weights) > 0.3:
+            #     self.data.qvel = q_vel_joints[:,0] + q_vel_convergence * 0.05
+            # else:
+            #     self.data.qvel = q_vel_convergence #+ q_vel_joints[:,0] * self.rotation_joints_weights[0]
+            for i in range(q_vel_joints.shape[1]):
+                self.data.qvel = q_vel_joints[:,i] * self.rotation_joints_weights[i] + q_vel_convergence
+
+            #check limits
+            self.check_joint_limits(self.data.qpos)
+            mujoco.mj_step(self.model, self.data)
+            self.collision_num += self.check_collision()
+            
+            #self.trajectory_qpos.append(self.data.qpos.copy())
+            self.store_data()
+            time_end = self.data.time
+            time_diff = time_end - time_start
+
+        return self.data
     '''
     #-----------------------------------move ee, joints and sensors in tangent and norm direction--------------------------------
     #-----------------------------------------------------------------------------------------------------------------------------------
@@ -799,7 +856,8 @@ class FrankaHumanEnv_():
         joints_vel = velocity[:joints_num] # velocity of joints 4, if there are more joints, add them here
         avoid_vel = velocity[joints_num:-1]
         ref_vel = velocity[-1]
-        self.data = self.sensors_velocity_control(goal, avoid_vel,ref_vel,joints_vel,init_q, body_id) #calculate the qpos
+        ref_goal = goal[-1]
+        self.data = self.sensors_velocity_control(ref_goal, avoid_vel,ref_vel,joints_vel,init_q, body_id) #calculate the qpos
 
 
     def sensors_velocity_control(self, goal, avoid_vel, ref_vel, joints_vel, init_q, body_id):
@@ -812,17 +870,22 @@ class FrankaHumanEnv_():
         time_end = 0
         time_diff = 0
         q_vel_avoid = self.maximize_q_vel(avoid_vel,ref_vel,body_id)
-        q_vel_convergence = self.get_ee_qpos(body_id, ref_vel)
+        #q_vel_convergence = self.get_ee_qpos(body_id, ref_vel)
+        #q_ctrl_convergence = self.get_ee_qctrl(goal, body_id, ref_vel)
         q_vel_joints = self.get_joints_qpos(self.rotation_joints, goal, joints_vel)
         while (np.linalg.norm(time_diff)<= self.delta_time):
             
             for i in range(q_vel_joints.shape[1]):
                 if np.all(q_vel_avoid == 0):
-                    self.data.qvel = q_vel_convergence#*self.ee_weight + q_vel_joints[:,i] * self.rotation_joints_weights[i]
+                    #self.data.qvel = q_vel_convergence#*self.ee_weight + q_vel_joints[:,i] * self.rotation_joints_weights[i]
                     #self.data.qvel = q_vel_convergence
+                    q_ctrl_convergence = self.get_ee_qctrl(goal, body_id, ref_vel)
+                    self.data.ctrl = q_ctrl_convergence
+
+                    #self.data.qvel = q_vel_convergence*0.5 + q_vel_joints[:,i] * 0.25
                 else:
                     #self.data.qvel = q_vel_avoid * 0.5 + q_vel_convergence*0.25 + q_vel_joints[:,i] * 0.25
-                    self.data.qvel = q_vel_avoid*(self.ee_weight + self.rotation_joints_weights[i]) + q_vel_convergence*0.1
+                    self.data.qvel = q_vel_avoid#*(self.ee_weight + self.rotation_joints_weights[i]) #+ q_vel_convergence*0.1
                     self.sensors_activation_num += 1
 
             #check limits
@@ -1141,22 +1204,87 @@ class FrankaHumanEnv_():
                 time.sleep(0.5)
 
 
+    def simulation(self):
+        # Get the model and data objects
+        m = self.model
+        d = self.data
+
+        # Initialize MuJoCo viewer
+        with mujoco.viewer.launch_passive(m, d) as viewer:
+            start = time.time()
+            while viewer.is_running() and time.time() - start < 1000:
+                step_start = time.time()
+                for i in range(len(self.trajectory_qpos)):
+                    # Update joint positions from the stored trajectory
+                    d.qpos[:] = self.trajectory_qpos[i]
+                    
+                    # Update geometry and visualization properties
+                    gem_pos = np.zeros((89, 3))  # Example: 89 geometries
+                    m.geom_pos[:], m.geom_quat[:] = self.model_storage[i]
+                    m.site_size[:], m.site_rgba[:] = self.model_size_color_storage[i]
+
+                    # Sphere size (radius)
+                    size = np.array([0.01, 0.01, 0.01], dtype=np.float64)  # 3-element float array
+                    pos_start = self.get_ee_position()
+
+                    # Position and orientation
+                    pos = np.array([pos_start[0], pos_start[1], pos_start[2]], dtype=np.float64)  # 3-element float array
+                    mat = np.eye(3, dtype=np.float64).flatten()  # 3x3 identity matrix, flattened to 9 elements
+
+                    # RGBA color
+                    rgba = np.array([0.8, 0.8, 0.7, 0.1], dtype=np.float32)  # 4-element float array
+
+                    # Initialize geometry
+                    # Add a new geometry to the viewer if the number of geometries does not exceed the limit
+                    viewer.user_scn.ngeom+=1
+                    mujoco.mjv_initGeom(
+                        viewer.user_scn.geoms[viewer.user_scn.ngeom-1],
+                        mujoco.mjtGeom.mjGEOM_SPHERE,
+                        size,
+                        pos,
+                        mat,
+                        rgba
+                    )
+
+                    # Draw a line trajectory between consecutive positions
+                    line_geom = mujoco.MjvGeom()
+
+                    # Step the simulation
+                    mujoco.mj_step(m, d)
+                    pos_after = self.get_ee_position()
+                    if i > 0:
+                        mujoco.mjv_connector(
+                            line_geom,
+                            mujoco.mjtGeom.mjGEOM_LINE,
+                            2,
+                            pos_start,
+                            pos_after,
+                        )
+
+                    # Sync the viewer to render the updated state
+                    viewer.sync()
+
+                    # Sleep to maintain real-time playback speed
+                    time.sleep(0.005)
+
+                print("---------------------one loop done---------------------")
+                time.sleep(0.5)
     '''
     # --------------------------------------------- qpos calculation -------------------------------------------------------------------------
     # -----------------------------------------------------------------------------------------------------------------------------------------
     '''
-    def converge_ik(configuration, tasks, dt, solver, pos_threshold, ori_threshold, max_iters):
+    def converge_ik(self, tasks, dt, solver, pos_threshold, ori_threshold, max_iters):
         """
         Runs up to 'max_iters' of IK steps. Returns True if position and orientation
         are below thresholds, otherwise False.
         """
         for _ in range(max_iters):
-            vel = mink.solve_ik(configuration, tasks, dt, solver, 1e-3)
-            configuration.integrate_inplace(vel, dt)
+            vel = mink.solve_ik(self.configuration, tasks, dt, solver, 1e-3)
+            self.configuration.integrate_inplace(vel, dt)
 
             # Only checking the first FrameTask here (end_effector_task). 
             # If you want to check multiple tasks, sum or combine their errors.
-            err = tasks[0].compute_error(configuration)
+            err = tasks[0].compute_error(self.configuration)
             pos_achieved = np.linalg.norm(err[:3]) <= pos_threshold
             ori_achieved = np.linalg.norm(err[3:]) <= ori_threshold
 
@@ -1164,66 +1292,99 @@ class FrankaHumanEnv_():
                 return True
         return False
 
-    def mink_ik(self):
+    def mink_ik(self,goal):
         # IK parameters
         SOLVER = "quadprog"
         POS_THRESHOLD = 1e-4
         ORI_THRESHOLD = 1e-4
         MAX_ITERS = 20
-
-        # Create a Mink configuration
-        configuration = mink.Configuration(self.model)
-
-        # Define tasks
-        end_effector_task = mink.FrameTask(
-            frame_name="attachment_site",
-            frame_type="site",
-            position_cost=1.0,
-            orientation_cost=1.0,
-            lm_damping=1.0,
-        )
-        posture_task = mink.PostureTask(model=self.model, cost=1e-2)
-        tasks = [end_effector_task, posture_task]
-
+        dt = 0.001
+        #goal = np.array([goal[0], goal[1], goal[2]])
+        # Create a Mink self.configuration
         
-        configuration.update(self.data.qpos)
-        posture_task.set_target_from_configuration(configuration)
-        mujoco.mj_forward(self.model, self.data)
+        #self.data.mocap_pos[0] = goal
+        self.configuration = mink.Configuration(self.model)
 
-        # Move the mocap target to the end-effector's current pose
-        mink.move_mocap_to_frame(self.model, self.data, "intergoal_site", "attachment_site", "site")
-        initial_target_position = self.data.mocap_pos[0].copy()
-
-        # Circular trajectory parameters
-        amp = 0.12
-        freq = 0.4
-
-        # We'll track time ourselves for a smoother trajectory
-        local_time = 0.0
-        rate = RateLimiter(frequency=200.0, warn=False)
-
-           
-        # Update our local time
-        dt = rate.dt
-        local_time += dt
-
+        #self.data.mocap_pos[0] = goal
         
-        self.data.mocap_pos[0] = initial_target_position
+        # Reset simulation data to the 'home' keyframe
+        #mujoco.mj_resetDataKeyframe(self.model, self.data, self.model.key("home").id)
+        #self.configuration.update(self.data.qpos)
+        self.posture_task.set_target_from_configuration(self.configuration)
+        #mujoco.mj_forward(self.model, self.data)
+
+        # Initialize to the home keyframe.
+        #self.configuration.update_from_keyframe("home")
+
+        # Initialize the mocap target at the end-effector site.
+        #mink.move_mocap_to_frame(self.model, self.data, "intergoal", "attachment_site", "site")
+        #initial_target_position = self.data.mocap_pos[0].copy()
+
+        #self.data.mocap_pos[0] = goal
 
         # Update the end effector task target from the mocap body
-        T_wt = mink.SE3.from_mocap_name(self.model, self.data, "target")
-        end_effector_task.set_target(T_wt)
+        T_wt = mink.SE3.from_mocap_name(self.model, self.data, "intergoal")
+        self.end_effector_task.set_target(T_wt)
 
         # Attempt to converge IK
-        converged = self.converge_ik(configuration, tasks, dt, SOLVER,
+        converged = self.converge_ik(self.tasks, dt, SOLVER,
                                 POS_THRESHOLD, ORI_THRESHOLD, MAX_ITERS)
 
-        # Set robot controls (first 8 dofs in your configuration)
-        self.data.ctrl = configuration.q[:8]
+        # Set robot controls (first 8 dofs in your self.configuration)
+        self.data.ctrl = self.configuration.q[:8]
 
+        # goal_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "intergoal")
+        # # Set the mocap position to the goal
+        # print("intergoal position: ", self.data.xpos[goal_id])
+        # print("goal position: ", self.data.mocap_pos[0])
+        # print("model position: ", self.data.body("intergoal").xpos)
         # Step simulation
-        mujoco.mj_step(self.model, self.data)
+        #mujoco.mj_step(self.model, self.data)
+        self.store_data()
         return self.data.ctrl[:8]
+    
+    def mink_ik2(self, goal):
+        # IK parameters
+        SOLVER = "quadprog"
+        POS_THRESHOLD = 1e-4
+        ORI_THRESHOLD = 1e-4
+        MAX_ITERS = 20
+        dt = 0.001
+
+        goal = np.array(self.goal)
+
+        self.configuration = mink.Configuration(self.model)
+        self.configuration.update(self.data.qpos)
+        self.posture_task.set_target_from_configuration(self.configuration)
+
+        # Move mocap to end-effector initially
+        mink.move_mocap_to_frame(self.model, self.data, "intergoal", "attachment_site", "site")
+
+        # Step once to register mocap
+        mujoco.mj_forward(self.model, self.data)
+
+        # Use small loop to converge and apply mocap
+        for _ in range(30):  # 30 steps = ~30ms at 1kHz
+            # Live update goal
+            self.data.mocap_pos[0] = goal
+            mujoco.mj_step(self.model, self.data)
+
+            # Update IK target from mocap
+            T_wt = mink.SE3.from_mocap_name(self.model, self.data, "intergoal")
+            self.end_effector_task.set_target(T_wt)
+
+            # Attempt to converge IK
+            converged = self.converge_ik(self.tasks, dt, SOLVER,
+                                        POS_THRESHOLD, ORI_THRESHOLD, MAX_ITERS)
+
+            # Apply to ctrl
+            self.data.ctrl = self.configuration.q[:8]
+
+            if converged:
+                break
+
+        return self.data.ctrl[:8]
+
 
     def get_ee_qpos(self,body_id,ref_vel):
         jac = np.zeros((6, self.model.nv))
@@ -1255,6 +1416,12 @@ class FrankaHumanEnv_():
             #print("shape: ", shape)
             delta_q = np.ones(shape)*0.01
         return delta_q
+    
+    def get_ee_qctrl(self, goal, body_id, ref_vel):
+        #self.build_inter_goal_object(goal)
+        q_ctrl = self.mink_ik(goal)
+        return q_ctrl
+        
     
     def get_joints_qpos(self, joints_idex, joints_goal, joints_vel):
         joints_id = []
@@ -1290,6 +1457,7 @@ class FrankaHumanEnv_():
                 q_vel_joints[i] = delta_q
         return q_vel_joints.T
 
+    
     def maximize_q_vel(self,avoid_vel,ref_vel, body_id):
  
         weights_sensors = self.animator.weights_sensors
@@ -1552,12 +1720,28 @@ class FrankaHumanEnv_():
     def bulid_goal_object(self,goal):
         name = "goal"
         position = goal
-        size = [0.02, 0.02, 0.02]
+        size = [0.04, 0.04, 0.04]
         self.spec.worldbody.add_site(name= name +'_site',
                 type=mujoco.mjtGeom.mjGEOM_BOX,
                 rgba=[0, 1, 0, 1],
                 size= size,
                 pos= position)
+        self.model = self.spec.compile()
+        self.data = mujoco.MjData(self.model)
+        #mujoco.mj_forward(self.model, self.data)
+
+    def build_inter_goal_object(self,goal):
+        name = "intergoal"
+        position = goal
+        size = [0.03, 0.03, 0.03]
+        body = self.spec.worldbody.add_body(name= name,pos = position, mocap = True)
+        # = self.spec.find_body(name)
+        body.add_site(name= name +'_site',
+                type=mujoco.mjtGeom.mjGEOM_BOX,
+                rgba=[1, 0, 0, 1],
+                size= size,
+                pos= position,
+                )
         self.model = self.spec.compile()
         self.data = mujoco.MjData(self.model)
         #mujoco.mj_forward(self.model, self.data)

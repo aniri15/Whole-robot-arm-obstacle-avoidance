@@ -16,6 +16,7 @@ from dynamic_obstacle_avoidance.obstacles import HyperSphere
 from scipy.spatial.transform import Rotation as R
 import time
 from itertools import accumulate
+import mink
 
 DEFAULT_CAMERA_CONFIG = {
     "distance": 1.4,
@@ -65,12 +66,12 @@ class FrankaMultiObsEnv_():
         self.camera = mujoco.MjvCamera()
         mujoco.mjv_defaultFreeCamera(self.model, self.camera)
         self.camera.distance = 4
-        self.it_max = 1000            #horizon
+        self.it_max = 500            #horizon
 
         # update step size
         self.step_size_position = 0.01
         self.step_size_ik = 0.1 #0.5
-        self.delta_time = 0.01      # 100hz
+        self.delta_time = 0.05      # 100hz
 
         # initialize for ik controller
         self.tol = 0.05   # unit: m, tolerance is 5cm
@@ -90,9 +91,9 @@ class FrankaMultiObsEnv_():
         self.initial_qpos = {
             #'object0:joint': [1.25, 0.53, 0.4, 1., 0., 0., 0.],#[1.25, 0.53, 0.4, 1., 0., 0., 0.]
             'joint1': 0.144,
-            'joint2': -0.5,#-0.2188,
+            'joint2': -0.2188,
             'joint3': 0.127,
-            'joint4': -3.3,#-2.6851,
+            'joint4': -2.6851,
             'joint5': 0.0092,
             'joint6': 2.4664,
             'joint7': 0.157,
@@ -100,7 +101,7 @@ class FrankaMultiObsEnv_():
             'finger_joint2': 0.04,
         }
         self.rotation_joints = np.array([4]) #np.array([2,4,6])# rotation joints at the 2st, 4rd and 6th joints(at the end of the arms)
-        self.rotation_joints_weights = np.array([0.5])
+        self.rotation_joints_weights = np.array([0])
         self.ee_weight = 1
         self.avoid_weight = 1
         self.singularities_number = 0
@@ -114,11 +115,27 @@ class FrankaMultiObsEnv_():
         self.collision_num = 0
         #self.initial_simulation()
         self.build_goal_object(goal)
+        #self.build_inter_goal_object(goal)
         self.build_sensor_points()
         #self.build_less_sensor_points()
         self.collision_visualization()
         self.initial_simulation()
+        self.initial_ik()
         
+    def initial_ik(self):
+        # initial ik configuration
+        self.configuration = mink.Configuration(self.model)
+        # Define tasks
+        self.end_effector_task = mink.FrameTask(
+            frame_name="attachment_site",
+            frame_type="site",
+            position_cost=1.0,
+            orientation_cost=1.0,
+            lm_damping=1.0,
+        )
+        self.posture_task = mink.PostureTask(model=self.model, cost=1e-2)
+        self.tasks = [self.end_effector_task, self.posture_task]
+
     def initial_simulation(self):
         for name, value in self.initial_qpos.items():
             self._utils.set_joint_qpos(self.model, self.data, name, value)
@@ -615,13 +632,17 @@ class FrankaMultiObsEnv_():
             for i in range(q_vel_joints.shape[1]):
                 if np.all(q_vel_avoid == 0):
                     self.data.qvel = q_vel_convergence*self.ee_weight + q_vel_joints[:,i] * self.rotation_joints_weights[i]
-                    error = np.subtract(goal, self.get_ee_position())
-                    if np.linalg.norm(error) < 0.2:
-                        self.data.qvel = q_vel_convergence
-                    #self.data.qvel = q_vel_convergence
+
+                    #error = np.subtract(goal, self.get_ee_position())
+                    #if np.linalg.norm(error) < 0.2:
+                    #   self.data.qvel = q_vel_convergence
+                    
+                
+                    # q_ctrl = self.get_ee_qctrl(goal[-1],body_id, ref_vel)
+                    # self.data.ctrl = q_ctrl
                 else:
                     #self.data.qvel = q_vel_avoid * 0.5 + q_vel_convergence*0.25 + q_vel_joints[:,i] * 0.25
-                    self.data.qvel = q_vel_avoid #+ q_vel_convergence*0.05
+                    self.data.qvel = q_vel_avoid + q_vel_convergence*0.05
                     self.sensors_activation_num += 1
             
             ee_end = self.get_ee_position()
@@ -638,6 +659,12 @@ class FrankaMultiObsEnv_():
             self.store_data()
             time_end = self.data.time
             time_diff = time_end - time_start
+
+        # print("norm of qvel: ", np.linalg.norm(self.data.qvel))
+        # for m in range(len(self.data.qvel)):
+        #     print(f"joint{m} qvel: ", self.data.qvel[m])
+        #     if m == 3:
+        #         print("joint4 qpos: ", self.data.qpos[m])
 
         if not np.all(q_vel_avoid == 0):
             self.unchange_sensor_color_size()
@@ -978,8 +1005,82 @@ class FrankaMultiObsEnv_():
     # --------------------------------------------- qpos calculation -------------------------------------------------------------------------
     # -----------------------------------------------------------------------------------------------------------------------------------------
     '''
+    def converge_ik(self, tasks, dt, solver, pos_threshold, ori_threshold, max_iters):
+        """
+        Runs up to 'max_iters' of IK steps. Returns True if position and orientation
+        are below thresholds, otherwise False.
+        """
+        for _ in range(max_iters):
+            vel = mink.solve_ik(self.configuration, tasks, dt, solver, 1e-3)
+            self.configuration.integrate_inplace(vel, dt)
 
-    def get_ee_qpos(self,body_id,ref_vel):
+            # Only checking the first FrameTask here (end_effector_task). 
+            # If you want to check multiple tasks, sum or combine their errors.
+            err = tasks[0].compute_error(self.configuration)
+            pos_achieved = np.linalg.norm(err[:3]) <= pos_threshold
+            ori_achieved = np.linalg.norm(err[3:]) <= ori_threshold
+
+            if pos_achieved and ori_achieved:
+                return True
+        return False
+
+    def mink_ik(self,goal):
+        # IK parameters
+        SOLVER = "quadprog"
+        POS_THRESHOLD = 1e-4
+        ORI_THRESHOLD = 1e-4
+        MAX_ITERS = 20
+        dt = 0.001
+        #goal = np.array([goal[0], goal[1], goal[2]])
+        # Create a Mink self.configuration
+        
+        #self.data.mocap_pos[0] = goal
+        self.configuration = mink.Configuration(self.model)
+
+        #self.data.mocap_pos[0] = goal
+        
+        # Reset simulation data to the 'home' keyframe
+        #mujoco.mj_resetDataKeyframe(self.model, self.data, self.model.key("home").id)
+        #self.configuration.update(self.data.qpos)
+        self.posture_task.set_target_from_configuration(self.configuration)
+        #mujoco.mj_forward(self.model, self.data)
+
+        # Initialize to the home keyframe.
+        #self.configuration.update_from_keyframe("home")
+
+        # Initialize the mocap target at the end-effector site.
+        #mink.move_mocap_to_frame(self.model, self.data, "intergoal", "attachment_site", "site")
+        #initial_target_position = self.data.mocap_pos[0].copy()
+
+        #self.data.mocap_pos[0] = goal
+
+        # Update the end effector task target from the mocap body
+        T_wt = mink.SE3.from_mocap_name(self.model, self.data, "intergoal")
+        self.end_effector_task.set_target(T_wt)
+
+        # Attempt to converge IK
+        converged = self.converge_ik(self.tasks, dt, SOLVER,
+                                POS_THRESHOLD, ORI_THRESHOLD, MAX_ITERS)
+
+        # Set robot controls (first 8 dofs in your self.configuration)
+        self.data.ctrl = self.configuration.q[:8]
+
+        # goal_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "intergoal")
+        # # Set the mocap position to the goal
+        # print("intergoal position: ", self.data.xpos[goal_id])
+        # print("goal position: ", self.data.mocap_pos[0])
+        # print("model position: ", self.data.body("intergoal").xpos)
+        # Step simulation
+        #mujoco.mj_step(self.model, self.data)
+        self.store_data()
+        return self.data.ctrl[:8]
+    
+    def get_ee_qctrl(self, goal, body_id, ref_vel):
+        #self.build_inter_goal_object(goal)
+        q_ctrl = self.mink_ik(goal)
+        return q_ctrl
+
+    def get_ee_qpos_old(self,body_id,ref_vel):
         jac = np.zeros((6, self.model.nv))
         current_pose = self.data.body(body_id).xpos
         mujoco.mj_jac(self.model, self.data, jac[:3], jac[3:], current_pose, body_id)
@@ -994,6 +1095,7 @@ class FrankaMultiObsEnv_():
         dv = self.desired_velocity(ref_vel)
         n = j.shape[1]
         I = np.identity(n)
+        #print("j :", j.T @ j)
         product = j.T @ j + self.damping * I
         
         if np.isclose(np.linalg.det(product), 0):
@@ -1008,8 +1110,48 @@ class FrankaMultiObsEnv_():
             shape = delta_q.shape
             #print("shape: ", shape)
             delta_q = np.ones(shape)*0.01
+        
         return delta_q
     
+    def get_ee_qpos(self, body_id, ref_vel):
+        jac = np.zeros((6, self.model.nv))
+        current_pose = self.data.body(body_id).xpos
+        mujoco.mj_jac(self.model, self.data, jac[:3], jac[3:], current_pose, body_id)
+        j = jac
+
+        if np.linalg.matrix_rank(j) < 6:
+            print("Jacobian is singular")
+            self.singularities_number += 1
+            return np.zeros(self.model.nv)
+
+        dv = self.desired_velocity(ref_vel)
+
+        # Damping
+        lambda2 = (0.01 + 0.1 * np.linalg.norm(dv))**2
+        jjt = j @ j.T + lambda2 * np.eye(6)
+        j_inv = j.T @ np.linalg.inv(jjt)
+
+        # Primary solution
+        delta_q = j_inv @ dv
+
+        # Null-space projection (toward home pose)
+        q_home = np.zeros(self.model.nv)
+        null_weight = 0.05
+        q_null = -null_weight * (self.data.qpos[:self.model.nv] - q_home)
+        null_proj = np.eye(self.model.nv) - j.T @ np.linalg.inv(j @ j.T + lambda2 * np.eye(6)) @ j
+        delta_q += null_proj @ q_null
+
+        # Smooth output
+        self.prev_qvel = getattr(self, "prev_qvel", np.zeros_like(delta_q))
+        alpha = 0.2
+        delta_q = alpha * delta_q + (1 - alpha) * self.prev_qvel
+        self.prev_qvel = delta_q
+
+        return delta_q
+
+
+
+
     def get_joints_qpos(self, joints_idex, joints_goal, joints_vel):
         joints_id = []
         for i in range(len(self.rotation_joints)):
@@ -1337,15 +1479,30 @@ class FrankaMultiObsEnv_():
                 rgba=[0, 1, 0, 1],
                 size= size,
                 pos= position)
-        # self.spec.worldbody.add_geom(name= name +'_geom',
-        #         type=mujoco.mjtGeom.mjGEOM_BOX,
-        #         rgba=[0, 1, 0, 1],
-        #         size= [0.0001, 0.0001, 0.0001],
-        #         pos= position)
+        self.spec.worldbody.add_geom(name= name +'_geom',
+                type=mujoco.mjtGeom.mjGEOM_BOX,
+                rgba=[0, 1, 0, 1],
+                size= [0.0001, 0.0001, 0.0001],
+                pos= position)
         self.model = self.spec.compile()
         self.data = mujoco.MjData(self.model)
         #mujoco.mj_forward(self.model, self.data)
 
+    def build_inter_goal_object(self,goal):
+        name = "intergoal"
+        position = goal
+        size = [0.03, 0.03, 0.03]
+        body = self.spec.worldbody.add_body(name= name,pos = position, mocap = True)
+        # = self.spec.find_body(name)
+        body.add_site(name= name +'_site',
+                type=mujoco.mjtGeom.mjGEOM_BOX,
+                rgba=[1, 0, 0, 1],
+                size= size,
+                pos= position,
+                )
+        self.model = self.spec.compile()
+        self.data = mujoco.MjData(self.model)
+        #mujoco.mj_forward(self.model, self.data)
 
     def build_sensor_points(self):
         ''' attach multiple points to the robot arms, in order to use them for obstacle avoidance method later

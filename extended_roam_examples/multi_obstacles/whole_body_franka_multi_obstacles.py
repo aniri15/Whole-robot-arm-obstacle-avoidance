@@ -25,10 +25,10 @@ print("scene_path: ", scene_path)
 # good example
 # goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] good comparision
 # goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] unreachable for norm dir
-goal = np.array([0.5, -0.3, 0.6])
+goal = np.array([0.32819042, 0.55914762, 0.4019981])
 #goal = np.array([0.4, 0.2, 0.5]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
 #goal = np.array([0.67735902, 0.27006253, 0.22115411]) #0.67735902, 0.27006253, 0.22115411
-dynamic_human = False
+dynamic_human = True
 obstacle = True
 env = FrankaMultiObsEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
 if env.check_collision():

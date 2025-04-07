@@ -859,6 +859,7 @@ class MultiObstacleAvoider:
 
         node_list: list[NodeType] = []
         component_weights: list[list[np.ndarray]] = []
+        component_distances: list[list[np.ndarray]] = []
         # obstacle_gammas = np.zeros(len(self.tree_list))
         tree_influence_weights = np.zeros(len(self.tree_list))
 
@@ -902,6 +903,7 @@ class MultiObstacleAvoider:
                 pass
 
             component_weights.append(obstacle_weights)
+            component_distances.append(gamma_values)
 
         # print(tree_influence_weights)
         normalized_weights, tot_weight = get_limited_weights_to_max_sum(
@@ -914,7 +916,7 @@ class MultiObstacleAvoider:
         self._cluster_weights = np.concatenate(
             [wo * wc for wo, wc in zip(normalized_weights, component_weights)]
         )
-        
+        self.distances = np.concatenate(component_distances)
         #print("position: ", position)
         #print("number of weights: ", len(self._cluster_weights))
         #print("cluster weights: ", self._cluster_weights)
@@ -926,6 +928,7 @@ class MultiObstacleAvoider:
         )
         #print("final weights", final_weights)
         self.final_weights_for_sensors = final_weights
+        self.final_distances_for_sensors = self.distances
         weighted_sequence = self._tangent_tree.reduce_weighted_to_sequence(
             node_list=node_list, weights=final_weights
         )
@@ -938,6 +941,9 @@ class MultiObstacleAvoider:
 
     def get_final_weights_for_sensors(self):
         return self.final_weights_for_sensors
+
+    def get_final_distances_for_sensors(self):
+        return self.final_distances_for_sensors
 
     @staticmethod
     def compute_weights_from_distances(

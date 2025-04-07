@@ -40,15 +40,20 @@ f = open("results.txt", "a")
 while it < it_max:
     # randomize the goal in range of [0.4, 0.4, 0.4] to [0.9, 0.9, 0.9]
     print("scenes number: ", it)
-    goal = np.random.rand(3)*0.2 + 0.3
-    env = FrankaHumanEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
+    goal = np.random.rand(3)*0.3 + 0.3
+    z = np.random.rand(1)*0.2 + 0.4
+    goal[2] = z
+    #env = FrankaHumanEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
+    env = FrankaMultiObsEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
 
     env_name = "human_table" # "table_box" or "complex_table" or "human_table" or "cuboid_sphere" or "table"
     if obstacle == True:
         start_positions = env.get_joints_sensors_end_position()
+        #start_positions = env.get_joints_end_position()
         print("end_effector_position: ", env.get_ee_position())
         print("goal: ", goal)
         env.move_franka_robot_sensors_norm_dir(start_positions, goal, env_name)
+        #env.move_franka_robot_norm_dir(start_positions, goal, env_name)
     elif obstacle == False:
         start_positions = env.get_joints_end_position()
         print("end_effector_position: ", env.get_ee_position())
@@ -74,7 +79,7 @@ while it < it_max:
     print("reach_goal: ", reach_goal)
     print("time_storage: ", time_storage)
 
-    f.write("goal: " + str(goal) + "\n")
+    f.write("ith " + str(it) + " goal: " + str(goal) + "\n")
     f.write("scene: " + str(env_name) + "\n")
     f.write("dynamic: " + str(dynamic_human) + "\n")
     f.write("collision number: " + str(env.collision_num) + "\n")
@@ -86,7 +91,8 @@ while it < it_max:
     #env.replay()
 
 
-
+f.write("---------------------------------------------------------------------------------------------" + "\n")
+f.close()
 if len(collision_storage) == len(reach_goal):
     for i in range(len(collision_storage)):
         print("collision_storage: ", collision_storage[i])

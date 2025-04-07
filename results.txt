@@ -358,3 +358,2208 @@ collision number: 0
 reach_goal: False
 time per step: 0.9796886203289032
 -------------------------------------
+goal: [0.49359927 0.42390892 0.30563884]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.8391852426528931
+-------------------------------------
+goal: [0.38769516 0.45469753 0.36335835]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0111845588684083
+-------------------------------------
+goal: [0.33761974 0.49350235 0.46823359]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0378480593363444
+-------------------------------------
+goal: [0.39825638 0.34970268 0.30572202]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0136695623397827
+-------------------------------------
+goal: [0.32320825 0.30539777 0.36392772]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9923647022247315
+-------------------------------------
+goal: [0.37733007 0.33806676 0.35440024]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.017473783493042
+-------------------------------------
+goal: [0.41523324 0.49321969 0.45025911]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0146555781364441
+-------------------------------------
+goal: [0.49382562 0.42455331 0.45796567]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.072639454494823
+-------------------------------------
+goal: [0.36744762 0.47058178 0.43740192]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0007583930574615
+-------------------------------------
+goal: [0.36685979 0.41767194 0.4533669 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0117743492126465
+-------------------------------------
+goal: [0.33571957 0.37497256 0.44571476]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9773533296585083
+-------------------------------------
+goal: [0.49072428 0.42418983 0.46876957]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0013861656188965
+-------------------------------------
+goal: [0.46740212 0.48070326 0.47074622]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0239236480311344
+-------------------------------------
+goal: [0.44687809 0.30141188 0.47921353]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0618669128417968
+-------------------------------------
+goal: [0.40545123 0.42265285 0.45635524]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9817456286004249
+-------------------------------------
+goal: [0.46914503 0.48831301 0.48871034]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.024086250199212
+-------------------------------------
+goal: [0.48949151 0.36322    0.49735072]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9847164154052734
+-------------------------------------
+goal: [0.39839884 0.45564348 0.32011181]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.844280276298523
+-------------------------------------
+goal: [0.34721873 0.40579101 0.35168615]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0525454902648925
+-------------------------------------
+goal: [0.37446244 0.36211182 0.34397493]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9698394393920898
+-------------------------------------
+goal: [0.40115266 0.3003711  0.44747178]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9721759271621704
+-------------------------------------
+goal: [0.37709666 0.38571116 0.41885069]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0756137323379518
+-------------------------------------
+goal: [0.49695514 0.33179162 0.3975715 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.96949294090271
+-------------------------------------
+goal: [0.33494244 0.47106601 0.42431065]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9893936549915987
+-------------------------------------
+goal: [0.4377575  0.46404602 0.32410272]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.920601978302002
+-------------------------------------
+goal: [0.37125373 0.44104433 0.45159474]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0961697483062744
+-------------------------------------
+goal: [0.47226036 0.35062122 0.48699997]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.015546636581421
+-------------------------------------
+goal: [0.47673071 0.41361599 0.40140262]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.090259199142456
+-------------------------------------
+goal: [0.43875476 0.38562163 0.30415977]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.8868149566650391
+-------------------------------------
+goal: [0.43752997 0.49852241 0.37841607]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0387141023363387
+-------------------------------------
+goal: [0.46954501 0.30024328 0.45366397]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0109069347381592
+-------------------------------------
+goal: [0.31629109 0.47775218 0.40805197]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.009996918269566
+-------------------------------------
+goal: [0.31188338 0.45186386 0.43012728]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0031773438453675
+-------------------------------------
+goal: [0.30953164 0.41988524 0.37824223]
+scene: human_table
+dynamic: True
+collision number: 676
+reach_goal: False
+time per step: 1.0185023856163025
+-------------------------------------
+goal: [0.40729096 0.44011037 0.31963595]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9987563509941101
+-------------------------------------
+goal: [0.34306271 0.34210095 0.44790211]
+scene: human_table
+dynamic: True
+collision number: 2156
+reach_goal: False
+time per step: 1.007212969303131
+-------------------------------------
+goal: [0.32715592 0.32477884 0.30613322]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.2535514149665832
+-------------------------------------
+goal: [0.47832186 0.47200092 0.34837246]
+scene: human_table
+dynamic: True
+collision number: 3
+reach_goal: False
+time per step: 1.2826341285705567
+-------------------------------------
+goal: [0.47292461 0.30042192 0.47794346]
+scene: human_table
+dynamic: True
+collision number: 3
+reach_goal: False
+time per step: 1.2778662610054017
+-------------------------------------
+goal: [0.41660259 0.48776391 0.39825474]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.1929550496014683
+-------------------------------------
+goal: [0.42184596 0.46026155 0.40442336]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.2879403520513464
+-------------------------------------
+goal: [0.45535536 0.47451231 0.41785886]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.1763694626944405
+-------------------------------------
+goal: [0.40873746 0.3761552  0.40383128]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.201353566514121
+-------------------------------------
+goal: [0.4134983  0.30786696 0.40996131]
+scene: human_table
+dynamic: True
+collision number: 473
+reach_goal: False
+time per step: 1.1428837490081787
+-------------------------------------
+goal: [0.45243625 0.48179827 0.33139096]
+scene: human_table
+dynamic: True
+collision number: 40
+reach_goal: False
+time per step: 1.1699033036231994
+-------------------------------------
+goal: [0.31618059 0.46392536 0.43909134]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.2147550177574158
+-------------------------------------
+goal: [0.33444855 0.33112262 0.38135456]
+scene: human_table
+dynamic: True
+collision number: 1360
+reach_goal: True
+time per step: 1.2163893764927274
+-------------------------------------
+goal: [0.46675067 0.40064592 0.33918873]
+scene: human_table
+dynamic: True
+collision number: 208
+reach_goal: False
+time per step: 1.2657051630020142
+-------------------------------------
+goal: [0.47584377 0.36676102 0.31263894]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9921238102912903
+-------------------------------------
+goal: [0.36002665 0.44238525 0.33617379]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0971837606430053
+-------------------------------------
+goal: [0.35479503 0.38665412 0.34547519]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.1505189547538757
+-------------------------------------
+goal: [0.45992763 0.49227037 0.40374452]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0377689429691859
+-------------------------------------
+goal: [0.45525915 0.30898609 0.42634684]
+scene: human_table
+dynamic: True
+collision number: 358
+reach_goal: False
+time per step: 1.052982403755188
+-------------------------------------
+goal: [0.47315215 0.35303254 0.44617218]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.1024115986294216
+-------------------------------------
+goal: [0.42413913 0.43715075 0.46701382]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.999502420425415
+-------------------------------------
+goal: [0.32291443 0.44199113 0.49400233]
+scene: human_table
+dynamic: True
+collision number: 48
+reach_goal: False
+time per step: 1.073707781791687
+-------------------------------------
+goal: [0.3252021  0.47584422 0.37073478]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0518949913978577
+-------------------------------------
+goal: [0.42098941 0.46655252 0.34974914]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.1558957901000977
+-------------------------------------
+goal: [0.32859572 0.49179878 0.36794195]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.1609706115722656
+-------------------------------------
+goal: [0.48479465 0.34632394 0.37244695]
+scene: human_table
+dynamic: True
+collision number: 233
+reach_goal: False
+time per step: 1.2056619358062743
+-------------------------------------
+goal: [0.3044892  0.37897955 0.48110188]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.2709400424957276
+-------------------------------------
+goal: [0.41232271 0.35060778 0.32096048]
+scene: human_table
+dynamic: True
+collision number: 26
+reach_goal: False
+time per step: 1.1070162878036498
+-------------------------------------
+goal: [0.4748042  0.48985752 0.42023011]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0260645590330426
+-------------------------------------
+-------------------------------------------------------------------------------------------
+ith 0goal: [0.44504298 0.40958994 0.39148945]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.152173222327719
+-------------------------------------
+ith 1goal: [0.31072052 0.31405854 0.43782856]
+scene: human_table
+dynamic: True
+collision number: 1
+reach_goal: False
+time per step: 1.076119500398636
+-------------------------------------
+ith 2goal: [0.3996619  0.32503601 0.47401383]
+scene: human_table
+dynamic: True
+collision number: 14
+reach_goal: False
+time per step: 1.0737870526313782
+-------------------------------------
+ith 3goal: [0.34338659 0.35208267 0.4197332 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0137983123175531
+-------------------------------------
+ith 4goal: [0.39846611 0.36892256 0.48995095]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0322482204437256
+-------------------------------------
+ith 5goal: [0.43643039 0.3540999  0.44921737]
+scene: human_table
+dynamic: True
+collision number: 92
+reach_goal: False
+time per step: 1.0802340912818909
+-------------------------------------
+ith 6goal: [0.49471508 0.47368518 0.48351825]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.04268244460777
+-------------------------------------
+ith 7goal: [0.38126047 0.38375308 0.42466158]
+scene: human_table
+dynamic: True
+collision number: 249
+reach_goal: False
+time per step: 1.0066367888450622
+-------------------------------------
+ith 8goal: [0.47146101 0.38373193 0.39266825]
+scene: human_table
+dynamic: True
+collision number: 8
+reach_goal: False
+time per step: 1.101843580007553
+-------------------------------------
+ith 9goal: [0.35139761 0.31119701 0.48596973]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0090692734718323
+-------------------------------------
+ith 10goal: [0.42454471 0.31875455 0.36975268]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.0616970329284667
+-------------------------------------
+ith 11goal: [0.42686652 0.36042988 0.43593911]
+scene: human_table
+dynamic: True
+collision number: 59
+reach_goal: False
+time per step: 1.006158640384674
+-------------------------------------
+ith 12goal: [0.47678386 0.41763209 0.35818283]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.1162092232704162
+-------------------------------------
+ith 13goal: [0.45098388 0.4904795  0.33460229]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0687985563278197
+-------------------------------------
+ith 14goal: [0.48340321 0.41980202 0.38142113]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.081710928962344
+-------------------------------------
+ith 15goal: [0.49651557 0.33483268 0.36423891]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0413281977176667
+-------------------------------------
+ith 16goal: [0.31393299 0.35295313 0.30580557]
+scene: human_table
+dynamic: True
+collision number: 653
+reach_goal: True
+time per step: 0.8903155232232715
+-------------------------------------
+ith 17goal: [0.43449151 0.46123069 0.49483818]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0343495333194732
+-------------------------------------
+ith 18goal: [0.41407406 0.45609184 0.31212619]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.8789355146884918
+-------------------------------------
+ith 19goal: [0.36161994 0.30770558 0.35872126]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.041346890926361
+-------------------------------------
+ith 20goal: [0.39494855 0.4625958  0.47297587]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0660175204277038
+-------------------------------------
+ith 21goal: [0.33993594 0.31416552 0.41189514]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9897909140586854
+-------------------------------------
+ith 22goal: [0.35157903 0.4762346  0.48129003]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0365062487125396
+-------------------------------------
+ith 23goal: [0.4183315  0.36217111 0.34970137]
+scene: human_table
+dynamic: True
+collision number: 543
+reach_goal: False
+time per step: 1.0572395598888398
+-------------------------------------
+ith 24goal: [0.48207475 0.33638822 0.41804758]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 0.9930152277792653
+-------------------------------------
+ith 25goal: [0.30928826 0.35067382 0.48993382]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0193476247787476
+-------------------------------------
+ith 26goal: [0.31938879 0.385132   0.31128679]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.8913941097259521
+-------------------------------------
+ith 27goal: [0.47544605 0.35980035 0.32218045]
+scene: human_table
+dynamic: True
+collision number: 15
+reach_goal: False
+time per step: 0.9479914665222168
+-------------------------------------
+ith 28goal: [0.30674659 0.36510954 0.43734144]
+scene: human_table
+dynamic: True
+collision number: 506
+reach_goal: False
+time per step: 1.0515192115306855
+-------------------------------------
+ith 29goal: [0.3337024  0.31180709 0.30559462]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.053704799413681
+-------------------------------------
+ith 0goal: [0.44693167 0.43011799 0.42281111]
+scene: human_table
+dynamic: True
+collision number: 12
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 1goal: [0.41289471 0.45833065 0.41806067]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 2goal: [0.39714736 0.48860304 0.34088108]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 3goal: [0.47139249 0.44670748 0.33908993]
+scene: human_table
+dynamic: True
+collision number: 24
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 4goal: [0.38812961 0.4533556  0.36468821]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 5goal: [0.42354852 0.34422088 0.4959503 ]
+scene: human_table
+dynamic: True
+collision number: 23
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 6goal: [0.4330909  0.38894383 0.3866588 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 7goal: [0.32631916 0.41383067 0.46797144]
+scene: human_table
+dynamic: True
+collision number: 15
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 8goal: [0.33597983 0.48425714 0.39865731]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 9goal: [0.4477446  0.46377436 0.31240002]
+scene: human_table
+dynamic: True
+collision number: 17
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 10goal: [0.45379179 0.3103005  0.43285205]
+scene: human_table
+dynamic: True
+collision number: 81
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 11goal: [0.36486265 0.32869557 0.41739431]
+scene: human_table
+dynamic: True
+collision number: 68
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 12goal: [0.47008383 0.30680644 0.44480516]
+scene: human_table
+dynamic: True
+collision number: 76
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 13goal: [0.32790981 0.3692514  0.35177154]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 14goal: [0.45039086 0.42256143 0.43785669]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 15goal: [0.34048727 0.43605131 0.47538492]
+scene: human_table
+dynamic: True
+collision number: 11
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 16goal: [0.40825961 0.44513936 0.37673034]
+scene: human_table
+dynamic: True
+collision number: 12
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 17goal: [0.31208426 0.43557453 0.40311435]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 18goal: [0.39083598 0.36597573 0.36801905]
+scene: human_table
+dynamic: True
+collision number: 17
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 19goal: [0.39356649 0.32609032 0.34865916]
+scene: human_table
+dynamic: True
+collision number: 32
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 20goal: [0.48391654 0.48334841 0.47427342]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 21goal: [0.36822538 0.39236006 0.48930094]
+scene: human_table
+dynamic: True
+collision number: 45
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 22goal: [0.36607996 0.46998307 0.45241131]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 23goal: [0.30183572 0.30887506 0.3341966 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 24goal: [0.38453783 0.392212   0.44108645]
+scene: human_table
+dynamic: True
+collision number: 45
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 25goal: [0.39938437 0.35673188 0.33601826]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 26goal: [0.39053719 0.48400631 0.45053673]
+scene: human_table
+dynamic: True
+collision number: 8
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 27goal: [0.42918662 0.37273292 0.479744  ]
+scene: human_table
+dynamic: True
+collision number: 45
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 28goal: [0.39131106 0.39760016 0.45896486]
+scene: human_table
+dynamic: True
+collision number: 50
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 29goal: [0.42664164 0.46924698 0.47828277]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+---------------------------------------------------------------------------------------------ith 0goal: [0.31454458 0.40497478 0.39028131]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 1goal: [0.46696131 0.31025325 0.4297327 ]
+scene: human_table
+dynamic: True
+collision number: 319
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 2goal: [0.4386598  0.30559496 0.30450186]
+scene: human_table
+dynamic: True
+collision number: 245
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 3goal: [0.45465378 0.39722796 0.35135928]
+scene: human_table
+dynamic: True
+collision number: 75
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 4goal: [0.38981375 0.48957072 0.30387575]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 5goal: [0.31085923 0.40474452 0.39498426]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 6goal: [0.49705348 0.30305897 0.30025702]
+scene: human_table
+dynamic: True
+collision number: 392
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 7goal: [0.43620868 0.41864013 0.31417374]
+scene: human_table
+dynamic: True
+collision number: 51
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 8goal: [0.44626801 0.43710323 0.35339609]
+scene: human_table
+dynamic: True
+collision number: 57
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 9goal: [0.43499991 0.33898537 0.41032819]
+scene: human_table
+dynamic: True
+collision number: 181
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 10goal: [0.4681514  0.47758025 0.42188155]
+scene: human_table
+dynamic: True
+collision number: 30
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 11goal: [0.34692453 0.40857797 0.31376068]
+scene: human_table
+dynamic: True
+collision number: 12
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 12goal: [0.4684894  0.42021433 0.32775331]
+scene: human_table
+dynamic: True
+collision number: 67
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 13goal: [0.37636802 0.38883547 0.38499663]
+scene: human_table
+dynamic: True
+collision number: 33
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 14goal: [0.34300321 0.327552   0.4107598 ]
+scene: human_table
+dynamic: True
+collision number: 42
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 15goal: [0.3021539  0.31370645 0.34862162]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 16goal: [0.30563748 0.38028879 0.34436713]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 17goal: [0.40155244 0.4216188  0.42875119]
+scene: human_table
+dynamic: True
+collision number: 69
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 18goal: [0.42750239 0.46850343 0.4599578 ]
+scene: human_table
+dynamic: True
+collision number: 12
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 19goal: [0.47923051 0.33236253 0.36703186]
+scene: human_table
+dynamic: True
+collision number: 252
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 20goal: [0.39490418 0.46752305 0.47398438]
+scene: human_table
+dynamic: True
+collision number: 16
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 21goal: [0.39530531 0.31999534 0.35541543]
+scene: human_table
+dynamic: True
+collision number: 137
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 22goal: [0.48451733 0.3133709  0.45825765]
+scene: human_table
+dynamic: True
+collision number: 287
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 23goal: [0.48860213 0.33990371 0.3764521 ]
+scene: human_table
+dynamic: True
+collision number: 250
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 24goal: [0.46551395 0.46875588 0.48585232]
+scene: human_table
+dynamic: True
+collision number: 53
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 25goal: [0.46563903 0.3584898  0.3095657 ]
+scene: human_table
+dynamic: True
+collision number: 202
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 26goal: [0.45805077 0.30684378 0.42307154]
+scene: human_table
+dynamic: True
+collision number: 313
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 27goal: [0.41833032 0.36441795 0.43000513]
+scene: human_table
+dynamic: True
+collision number: 110
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 28goal: [0.47245557 0.3588771  0.39676087]
+scene: human_table
+dynamic: True
+collision number: 214
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 29goal: [0.35378987 0.48045347 0.36731061]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+---------------------------------------------------------------------------------------------ith 0goal: [0.31494613 0.38190708 0.58364834]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 1goal: [0.41657297 0.51757303 0.33998955]
+scene: human_table
+dynamic: True
+collision number: 15
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 2goal: [0.4335169  0.30360947 0.34801111]
+scene: human_table
+dynamic: True
+collision number: 279
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 3goal: [0.48569879 0.32641218 0.45781196]
+scene: human_table
+dynamic: True
+collision number: 274
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 4goal: [0.45008763 0.42071181 0.32981537]
+scene: human_table
+dynamic: True
+collision number: 52
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 5goal: [0.39943583 0.57993775 0.32984217]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 6goal: [0.54340145 0.32049409 0.32833081]
+scene: human_table
+dynamic: True
+collision number: 401
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 7goal: [0.54903375 0.42078563 0.35678971]
+scene: human_table
+dynamic: True
+collision number: 180
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 8goal: [0.4038847  0.47310264 0.30624378]
+scene: human_table
+dynamic: True
+collision number: 30
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 9goal: [0.36641918 0.46670513 0.31462129]
+scene: human_table
+dynamic: True
+collision number: 18
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 10goal: [0.40677027 0.32947791 0.41290839]
+scene: human_table
+dynamic: True
+collision number: 159
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 11goal: [0.38464309 0.57733827 0.45587668]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 12goal: [0.30628222 0.52682897 0.31815702]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 13goal: [0.56467231 0.35649723 0.34900578]
+scene: human_table
+dynamic: True
+collision number: 312
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 14goal: [0.4902644  0.53685537 0.33842729]
+scene: human_table
+dynamic: True
+collision number: 25
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 15goal: [0.46945038 0.32760099 0.47249731]
+scene: human_table
+dynamic: True
+collision number: 240
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 16goal: [0.36312577 0.33071974 0.50036365]
+scene: human_table
+dynamic: True
+collision number: 40
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 17goal: [0.38829712 0.50865598 0.32347684]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 18goal: [0.4752236  0.48917151 0.30710252]
+scene: human_table
+dynamic: True
+collision number: 46
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 19goal: [0.32092374 0.40972446 0.44409154]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 20goal: [0.31851873 0.37208024 0.30360673]
+scene: human_table
+dynamic: True
+collision number: 4
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 21goal: [0.5093307  0.57653053 0.53072612]
+scene: human_table
+dynamic: True
+collision number: 30
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 22goal: [0.42708595 0.51711825 0.4612231 ]
+scene: human_table
+dynamic: True
+collision number: 32
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 23goal: [0.57302089 0.55331426 0.39552115]
+scene: human_table
+dynamic: True
+collision number: 45
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 24goal: [0.36323355 0.42279666 0.52823081]
+scene: human_table
+dynamic: True
+collision number: 19
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 25goal: [0.30076626 0.55038466 0.50206811]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 26goal: [0.50112172 0.41747429 0.45968469]
+scene: human_table
+dynamic: True
+collision number: 144
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 27goal: [0.33258137 0.42967268 0.45256463]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 28goal: [0.39401405 0.50151709 0.58091607]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 29goal: [0.35652484 0.49013246 0.43645709]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+---------------------------------------------------------------------------------------------
+ith 0goal: [0.59266611 0.4306478  0.39296368]
+scene: human_table
+dynamic: True
+collision number: 15
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 1goal: [0.56169421 0.37584542 0.590293  ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 2goal: [0.57621929 0.5093865  0.42173698]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 3goal: [0.51180673 0.33673198 0.43245808]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 4goal: [0.38606878 0.45743438 0.45059591]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 5goal: [0.49138772 0.40476795 0.49717427]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 6goal: [0.55156893 0.3897448  0.47487858]
+scene: human_table
+dynamic: True
+collision number: 36
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 7goal: [0.48540787 0.44776948 0.36112863]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 8goal: [0.42682017 0.45624984 0.57661547]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 9goal: [0.52161926 0.32366633 0.56609785]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 10goal: [0.5534429  0.48503593 0.49084943]
+scene: human_table
+dynamic: True
+collision number: 21
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 11goal: [0.35928894 0.30624361 0.34336072]
+scene: human_table
+dynamic: True
+collision number: 30
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 12goal: [0.52868184 0.48074869 0.51794399]
+scene: human_table
+dynamic: True
+collision number: 21
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 13goal: [0.54414997 0.54810194 0.51634367]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 14goal: [0.35845457 0.43227983 0.45029611]
+scene: human_table
+dynamic: True
+collision number: 9
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 15goal: [0.58475078 0.38211115 0.32252656]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 16goal: [0.50898867 0.4071552  0.3865095 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 17goal: [0.39151117 0.4453241  0.53560845]
+scene: human_table
+dynamic: True
+collision number: 25
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 18goal: [0.49382686 0.51966796 0.41222562]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 19goal: [0.48451482 0.45045601 0.36250548]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 20goal: [0.57526368 0.39556812 0.46382603]
+scene: human_table
+dynamic: True
+collision number: 39
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 21goal: [0.57471619 0.38833308 0.45280631]
+scene: human_table
+dynamic: True
+collision number: 36
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 22goal: [0.36548098 0.50244405 0.5185035 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 23goal: [0.32613191 0.44253248 0.47416709]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 24goal: [0.52530703 0.40671056 0.48940862]
+scene: human_table
+dynamic: True
+collision number: 30
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 25goal: [0.38099284 0.54920311 0.45768533]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 26goal: [0.59022795 0.56313883 0.43449454]
+scene: human_table
+dynamic: True
+collision number: 20
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 27goal: [0.32149106 0.35010775 0.43588569]
+scene: human_table
+dynamic: True
+collision number: 33
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 28goal: [0.47347788 0.55471473 0.3219761 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: nan
+-------------------------------------
+ith 29goal: [0.49745191 0.36908022 0.51494428]
+scene: human_table
+dynamic: True
+collision number: 9
+reach_goal: False
+time per step: nan
+-------------------------------------
+---------------------------------------------------------------------------------------------
+ith 0goal: [0.56404875 0.46556866 0.50135823]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0770232629776002
+-------------------------------------
+ith 1goal: [0.59990599 0.42503192 0.52102298]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.090156512260437
+-------------------------------------
+ith 2goal: [0.58011121 0.46061311 0.50086136]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9927025127410889
+-------------------------------------
+ith 3goal: [0.42812587 0.5010252  0.4340214 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0918815374374389
+-------------------------------------
+ith 0goal: [0.33460303 0.48316396 0.58727163]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0888313961029052
+-------------------------------------
+ith 1goal: [0.58471007 0.44431093 0.33710176]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0825311303138734
+-------------------------------------
+ith 2goal: [0.49103606 0.34327237 0.54516094]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0778795719146728
+-------------------------------------
+ith 3goal: [0.57417294 0.49403667 0.56251608]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.1029983758926392
+-------------------------------------
+ith 4goal: [0.41795682 0.49252476 0.44300822]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0154246377944947
+-------------------------------------
+ith 5goal: [0.54016818 0.30925527 0.31180945]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9916965746879578
+-------------------------------------
+ith 6goal: [0.48884423 0.4297392  0.54998275]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: True
+time per step: 1.02677040856059
+-------------------------------------
+ith 7goal: [0.4537959  0.47238641 0.54684951]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9947196817398072
+-------------------------------------
+ith 8goal: [0.35015333 0.34258684 0.40837568]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9886381888389587
+-------------------------------------
+ith 9goal: [0.36885041 0.55491306 0.50278709]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0570672416687013
+-------------------------------------
+ith 10goal: [0.51201144 0.58233347 0.42311221]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.0593380236625671
+-------------------------------------
+ith 11goal: [0.40737382 0.45673597 0.4773198 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9847133874893188
+-------------------------------------
+ith 12goal: [0.55254952 0.35194811 0.31512804]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.8258080697059631
+-------------------------------------
+ith 13goal: [0.32893588 0.56374009 0.56770077]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.06531334400177
+-------------------------------------
+ith 14goal: [0.38694592 0.57436675 0.40973789]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9987112498283386
+-------------------------------------
+ith 15goal: [0.58822746 0.3324444  0.33817583]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.1286905598640442
+-------------------------------------
+ith 16goal: [0.53934378 0.3622213  0.30615222]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 0.9652324080467224
+-------------------------------------
+ith 17goal: [0.53898299 0.48967656 0.48025407]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.2437957692146302
+-------------------------------------
+ith 18goal: [0.59010729 0.37657122 0.41543222]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: False
+time per step: 1.1241502952575684
+-------------------------------------
+ith 0 goal: [0.45999635 0.49522732 0.52964755]
+scene: human_table
+dynamic: True
+collision number: 3
+reach_goal: [True]
+time per step: 0.9353390058525178
+-------------------------------------
+ith 1 goal: [0.51911623 0.43352825 0.54973371]
+scene: human_table
+dynamic: True
+collision number: 22
+reach_goal: [False]
+time per step: 0.961675060749054
+-------------------------------------
+ith 0 goal: [0.47051342 0.37504997 0.3131303 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.7603587206204733
+-------------------------------------
+ith 1 goal: [0.4788127  0.31623502 0.43047213]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9113092931111654
+-------------------------------------
+ith 2 goal: [0.44288389 0.44793226 0.37277028]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9241243918736776
+-------------------------------------
+ith 3 goal: [0.36536984 0.38722697 0.4448236 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9371247831980387
+-------------------------------------
+ith 4 goal: [0.39756601 0.43422809 0.39342471]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9073746109008789
+-------------------------------------
+ith 5 goal: [0.45609107 0.47742987 0.31477053]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.7488437104225159
+-------------------------------------
+ith 6 goal: [0.48916868 0.33437571 0.38102191]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.930113734404246
+-------------------------------------
+ith 7 goal: [0.40562864 0.44790533 0.37256634]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.8924709177017212
+-------------------------------------
+ith 8 goal: [0.40085109 0.44478426 0.40081179]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9592253923416137
+-------------------------------------
+ith 9 goal: [0.44986311 0.42498069 0.37217255]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9529715116818746
+-------------------------------------
+ith 10 goal: [0.48538035 0.33290225 0.47658347]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9347657736142476
+-------------------------------------
+ith 11 goal: [0.45471805 0.45125673 0.36998065]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9030485574404399
+-------------------------------------
+ith 12 goal: [0.41479834 0.47803781 0.43599468]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.898402259349823
+-------------------------------------
+ith 13 goal: [0.43808236 0.46886216 0.40097608]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.8998897965749105
+-------------------------------------
+ith 14 goal: [0.30518482 0.32160513 0.36261766]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.8834682043393453
+-------------------------------------
+ith 15 goal: [0.42888617 0.48541367 0.47413115]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9157257962226868
+-------------------------------------
+ith 16 goal: [0.39646247 0.44300371 0.48303176]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9173848930994669
+-------------------------------------
+ith 17 goal: [0.38454398 0.47451558 0.31414542]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.7671806271870931
+-------------------------------------
+ith 18 goal: [0.3707675  0.32542985 0.40092905]
+scene: human_table
+dynamic: True
+collision number: 7
+reach_goal: [False]
+time per step: 0.9266381208101908
+-------------------------------------
+ith 19 goal: [0.30050378 0.31460542 0.47872778]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9452450466156006
+-------------------------------------
+ith 20 goal: [0.37413965 0.45751902 0.49831074]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.8906252320607503
+-------------------------------------
+ith 21 goal: [0.45940101 0.34165929 0.45453565]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9352277318636576
+-------------------------------------
+ith 22 goal: [0.42640759 0.3817317  0.33146075]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9561938309669494
+-------------------------------------
+ith 23 goal: [0.30428097 0.46206831 0.37743063]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9475840497016906
+-------------------------------------
+ith 24 goal: [0.36954687 0.39412758 0.44042405]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9080166753133138
+-------------------------------------
+ith 25 goal: [0.33070815 0.42388463 0.33077543]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.912374374071757
+-------------------------------------
+ith 26 goal: [0.36192673 0.4028338  0.35840372]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9227546008427938
+-------------------------------------
+ith 27 goal: [0.41999576 0.37284135 0.31146508]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.7373034389813741
+-------------------------------------
+ith 28 goal: [0.32250757 0.47445062 0.30992412]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.7431598432858785
+-------------------------------------
+ith 29 goal: [0.43117013 0.38099936 0.48059469]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9180077759424845
+-------------------------------------
+---------------------------------------------------------------------------------------------
+ith 0 goal: [0.45803004 0.48489892 0.31194257]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.8937551226615906
+-------------------------------------
+ith 1 goal: [0.33256914 0.38268193 0.44907361]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 1.0654820439256267
+-------------------------------------
+ith 2 goal: [0.44785632 0.41235712 0.3482089 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 1.238541223049164
+-------------------------------------
+-------------------------------------------------------------------------------------------
+ith 0 goal: [0.40065933 0.47795568 0.51810526]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.928984726069074
+-------------------------------------
+ith 1 goal: [0.38028427 0.53492792 0.57244601]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.9365038427993329
+-------------------------------------
+ith 2 goal: [0.5795117  0.55185767 0.56624654]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 1.0092320094108582
+-------------------------------------
+ith 3 goal: [0.3496663  0.39612477 0.59116796]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.9427682244115405
+-------------------------------------
+ith 4 goal: [0.35626523 0.46882398 0.52871161]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.925343980149525
+-------------------------------------
+ith 5 goal: [0.58187305 0.49254223 0.47113746]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.981510956287384
+-------------------------------------
+ith 6 goal: [0.54666982 0.5363896  0.42812473]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9761541714668274
+-------------------------------------
+ith 7 goal: [0.58184325 0.32190882 0.40001551]
+scene: human_table
+dynamic: True
+collision number: 8
+reach_goal: [False]
+time per step: 0.9892190322875977
+-------------------------------------
+ith 8 goal: [0.58723656 0.39224884 0.43385084]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9745887360572815
+-------------------------------------
+ith 9 goal: [0.30935864 0.45009282 0.5813797 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.9135201201922651
+-------------------------------------
+ith 10 goal: [0.45260143 0.38323853 0.57315255]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.9861626372337341
+-------------------------------------
+ith 11 goal: [0.58431823 0.31217237 0.4420159 ]
+scene: human_table
+dynamic: True
+collision number: 86
+reach_goal: [False]
+time per step: 1.018837706565857
+-------------------------------------
+ith 12 goal: [0.54589305 0.52311647 0.57746693]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 1.1558051791191102
+-------------------------------------
+------------------------------------------------------------------------------------------------------
+ith 0 goal: [0.57478064 0.35122344 0.49956282]
+scene: human_table
+dynamic: True
+collision number: 44
+reach_goal: [True]
+time per step: 0.9087594396927777
+-------------------------------------
+ith 1 goal: [0.43138161 0.41138932 0.48237954]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.9375511077142531
+-------------------------------------
+ith 2 goal: [0.51786482 0.46678832 0.4893073 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8793874591778797
+-------------------------------------
+ith 3 goal: [0.33213784 0.33221035 0.43197604]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8746676782282388
+-------------------------------------
+ith 4 goal: [0.55808737 0.55891909 0.46990386]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8733497911883938
+-------------------------------------
+ith 5 goal: [0.53065789 0.56952991 0.42821298]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8706289761206683
+-------------------------------------
+ith 6 goal: [0.39630887 0.38249411 0.46696108]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.859427391449151
+-------------------------------------
+ith 7 goal: [0.35876072 0.49221593 0.58805086]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.9172870694816887
+-------------------------------------
+ith 8 goal: [0.53777611 0.56432316 0.55848651]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8905542189303827
+-------------------------------------
+ith 9 goal: [0.51362117 0.34435479 0.41124745]
+scene: human_table
+dynamic: True
+collision number: 22
+reach_goal: [True]
+time per step: 0.9070834469521183
+-------------------------------------
+ith 10 goal: [0.42990011 0.35157267 0.56697922]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8810159895155165
+-------------------------------------
+ith 11 goal: [0.54432976 0.31796621 0.42755062]
+scene: human_table
+dynamic: True
+collision number: 51
+reach_goal: [True]
+time per step: 0.8978020528546807
+-------------------------------------
+ith 12 goal: [0.39148139 0.33846978 0.59568361]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8490686596256413
+-------------------------------------
+ith 13 goal: [0.5115678  0.40241298 0.59620477]
+scene: human_table
+dynamic: True
+collision number: 9
+reach_goal: [True]
+time per step: 0.8429278086309564
+-------------------------------------
+ith 14 goal: [0.37134416 0.51879812 0.45575863]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.859399535682764
+-------------------------------------
+ith 15 goal: [0.3912513  0.51612923 0.44394914]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8924061576312876
+-------------------------------------
+ith 16 goal: [0.58516158 0.3737743  0.50464838]
+scene: human_table
+dynamic: True
+collision number: 37
+reach_goal: [True]
+time per step: 0.8707474304350796
+-------------------------------------
+ith 17 goal: [0.55016618 0.46833489 0.43784523]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8464884453890275
+-------------------------------------
+ith 18 goal: [0.32819042 0.55914762 0.4019981 ]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [False]
+time per step: 0.8804463663101196
+-------------------------------------
+ith 19 goal: [0.340706   0.42561217 0.40642864]
+scene: human_table
+dynamic: True
+collision number: 136
+reach_goal: [True]
+time per step: 0.8736854647307118
+-------------------------------------
+ith 20 goal: [0.42422019 0.46329233 0.53190035]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.9180907732775422
+-------------------------------------
+ith 21 goal: [0.52076788 0.56012943 0.45282102]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.893262998967231
+-------------------------------------
+ith 22 goal: [0.32463371 0.30693371 0.59536024]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.9285804300165889
+-------------------------------------
+ith 23 goal: [0.37178868 0.39124161 0.45512841]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.9103720054197847
+-------------------------------------
+ith 24 goal: [0.35720301 0.54335243 0.49671134]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8740446841579744
+-------------------------------------
+ith 25 goal: [0.55248859 0.31201949 0.48936238]
+scene: human_table
+dynamic: True
+collision number: 70
+reach_goal: [True]
+time per step: 0.9084868181699489
+-------------------------------------
+ith 26 goal: [0.44344034 0.30284388 0.48659127]
+scene: human_table
+dynamic: True
+collision number: 31
+reach_goal: [True]
+time per step: 0.9151802934817413
+-------------------------------------
+ith 27 goal: [0.33174374 0.46494347 0.59684415]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8726649416817559
+-------------------------------------
+ith 28 goal: [0.45619441 0.3739475  0.57109573]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8462016075614869
+-------------------------------------
+ith 29 goal: [0.43141096 0.44357537 0.49573051]
+scene: human_table
+dynamic: True
+collision number: 0
+reach_goal: [True]
+time per step: 0.8404428045470993
+-------------------------------------
+---------------------------------------------------------------------------------------------

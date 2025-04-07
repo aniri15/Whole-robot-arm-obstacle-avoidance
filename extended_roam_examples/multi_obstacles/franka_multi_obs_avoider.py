@@ -78,8 +78,8 @@ class ROAM:
         self.sphere = False
 
     def run_norm(self,ii):    
-        self.update_ee_step(ii)
         self.update_norm_dir(ii)
+        self.update_ee_step(ii)
         if self.dynamic_human & self.obstacle:
             #self.update_obstacle_pose()
             if self.sphere:
@@ -519,13 +519,39 @@ class ROAM:
         return velocities
     
     def update_ee_step(self, ii: int) -> None:
-        self.velocities = np.zeros((self.n_traj, 3))
+        # for i in range(self.n_traj-9, self.n_traj-1):
+        #     #print("i: ", i)
+        #     weights_length = 0
+        #     self.velocities[i] = self.avoider.evaluate_sequence(self.trajectories[:, ii, i])
+
+        #     if self.obstacle:
+        #         weights_sensor = self.avoider.get_final_weights_for_sensors()
+        #         for num in range(len(self.container)):
+        #             weights_length += len(self.container.get_tree(num))
+        #         weights_length += 1
+        #         #print("weights_length: ", weights_length)
+        #         if len(weights_sensor) == weights_length:
+        #             self.weights_sensors.append(weights_sensor)
+        #         elif len(weights_sensor) != 1 and len(weights_sensor) < weights_length:
+        #             reshaped_weights = np.zeros(weights_length)
+        #             #reshaped_weights[:len(weights_sensor)] = weights_sensor
+        #             reshaped_weights[weights_length-len(weights_sensor):] = weights_sensor
+        #             self.weights_sensors.append(reshaped_weights)
+        #         else:
+        #             reshaped_weights = np.zeros(weights_length)
+        #             reshaped_weights[:len(weights_sensor)] = weights_sensor
+        #             self.weights_sensors.append(reshaped_weights)
+        #     else:
+        #         self.weights_sensors.append(np.zeros(1))
+        
         self.velocities[-1] = self.avoider.evaluate_sequence(self.trajectories[:, ii, -1])
     
     def update_norm_dir(self,ii:int):
         #velocities = np.zeros((self.n_traj, 3))
+        self.velocities = np.zeros((self.n_traj, 3))
         self.weights_sensors = []
     
+        #for it_traj in range(self.n_traj-9):
         for it_traj in range(self.n_traj-1):
             weights_length = 0
             #print("it_traj: ", it_traj)

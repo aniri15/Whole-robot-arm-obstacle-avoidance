@@ -30,7 +30,7 @@ print("scene_path: ", scene_path)
 # goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] good comparision
 # goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] unreachable for norm dir
 goal = np.array([0.3, 0.2, 0.3])
-goal = np.array([0.49920839, 0.36343747, 0.33879179]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
+goal = np.array([0.45803004, 0.48489892, 0.31194257]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
 #[0.3,0.2,0.6]
 dynamic_human = True
 obstacle = True
@@ -47,7 +47,7 @@ if norm_dir == 1:
     print("goal: ", goal)
     print("start_positions shape: ", start_positions.shape)
     #env.render2()
-    env.move_franka_robot_norm_dir(start_positions, goal)
+    env.move_franka_robot_norm_dir(start_positions, goal,env_name)
     print("singular config number", env.singularities_number)
     print('------------------------------------')
     print("start replay")
