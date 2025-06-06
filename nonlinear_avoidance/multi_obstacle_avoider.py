@@ -432,7 +432,7 @@ class MultiObstacleAvoider:
         #     )
         #print('convergence sequence', convergence_sequence)
         final_sequence = self.evaluate_avoidance_from_sequence(
-            position, convergence_sequence, norm = True
+            position, convergence_sequence, normal = True
         )
         
         #self._tangent_tree.draw()
@@ -840,7 +840,7 @@ class MultiObstacleAvoider:
     def get_reference_node(node_id):
         return (node_id, 0)
 
-    def evaluate_avoidance_from_sequence(self, position, initial_sequence, norm = False):
+    def evaluate_avoidance_from_sequence(self, position, initial_sequence, normal = False):
         """Keep track of the rotation sequence when evaluating the full avoidance.
         This is advantageous when trying to follow highly nonlinear dynamics and
         large obstacle-trees.
@@ -882,7 +882,7 @@ class MultiObstacleAvoider:
                 obstacle_weights=obstacle_weights,
                 start_id=self._BASE_VEL_ID,
                 gamma_values=gamma_values,
-                norm = norm
+                normal = normal
             )
             # obstacle_gammas[ii_tree] = np.min(gamma_values)
 
@@ -1107,7 +1107,7 @@ class MultiObstacleAvoider:
         obstacle_weights,
         start_id: Hashable,
         gamma_values: Optional[np.ndarray] = None,
-        norm = False
+        normal = False
     ) -> list[NodeType]:
         """Returns the node-list and the (normalized) occlusion weights."""
         # Evaluate rotation weight, to ensure smoothness in space (!)
@@ -1121,7 +1121,7 @@ class MultiObstacleAvoider:
             direction=base_velocity,
         )
 
-        if not norm:
+        if not normal:
             convergence_radiuses = self.compute_convergence_radiuses(
                 gamma_values, position=position, obstacle_tree=obstacle
             )
@@ -1143,7 +1143,7 @@ class MultiObstacleAvoider:
                 obstacle=obstacle,
                 obs_idx=obs_idx,
                 convergence_radius=convergence_radiuses[comp_id],
-                #norm = norm
+                #normal = normal
             )
         return node_list
 
@@ -1456,7 +1456,7 @@ class MultiObstacleAvoider:
         obstacle: MultiObstacle,
         obs_idx: NodeType,
         convergence_radius: float = None,
-        norm = False
+        normal = False
     ) -> NodeType:
         (
             parents_tree,
@@ -1489,7 +1489,7 @@ class MultiObstacleAvoider:
         ):
             if convergence_radius > math.pi * 0.5:
                 # Add an intermediary node to ensure angle < math.pi
-                if not norm:
+                if not normal:
                     tangent = RotationalAvoider.get_projected_tangent_from_vectors(
                         velocity,
                         normal=normal_directions[0],
@@ -1507,7 +1507,7 @@ class MultiObstacleAvoider:
                 parent_id = node_id
 
             # Tail effecto or pointing towards obstacle
-            if not norm:
+            if not normal:
                 avoidance_direction = RotationalAvoider.get_projected_tangent_from_vectors(
                     velocity,
                     normal=normal_directions[0],

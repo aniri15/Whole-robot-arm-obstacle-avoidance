@@ -66,12 +66,12 @@ class FrankaMultiObsEnv_():
         self.camera = mujoco.MjvCamera()
         mujoco.mjv_defaultFreeCamera(self.model, self.camera)
         self.camera.distance = 4
-        self.it_max = 500            #horizon
+        self.it_max = 800      #500      #horizon
 
         # update step size
         self.step_size_position = 0.01
         self.step_size_ik = 0.1 #0.5
-        self.delta_time = 0.05      # 100hz
+        self.delta_time = 0.03 #0.05     # 100hz
 
         # initialize for ik controller
         self.tol = 0.05   # unit: m, tolerance is 5cm
@@ -100,8 +100,13 @@ class FrankaMultiObsEnv_():
             'finger_joint1': 0.04,
             'finger_joint2': 0.04,
         }
+        self.self_collision_pairs = [
+            ("link5_sensor_2", "attachment"),
+            #("link3", "link7"),
+            
+        ]
         self.rotation_joints = np.array([4]) #np.array([2,4,6])# rotation joints at the 2st, 4rd and 6th joints(at the end of the arms)
-        self.rotation_joints_weights = np.array([0])
+        self.rotation_joints_weights = np.array([0.1])
         self.ee_weight = 1
         self.avoid_weight = 1
         self.singularities_number = 0
@@ -120,7 +125,7 @@ class FrankaMultiObsEnv_():
         #self.build_less_sensor_points()
         self.collision_visualization()
         self.initial_simulation()
-        self.initial_ik()
+        #self.initial_ik()
         
     def initial_ik(self):
         # initial ik configuration
@@ -623,6 +628,9 @@ class FrankaMultiObsEnv_():
         time_start = self.data.time
         time_end = 0
         time_diff = 0
+        repulsive_vel = self.compute_self_avoidance_velocity()
+        #avoid_vel = avoid_vel + repulsive_vel
+        ref_vel = ref_vel + repulsive_vel
         q_vel_avoid = self.maximize_q_vel(avoid_vel,ref_vel,body_id)
         q_vel_convergence = self.get_ee_qpos(body_id, ref_vel)
         q_vel_joints = self.get_joints_qpos(self.rotation_joints, goal, joints_vel)
@@ -633,28 +641,31 @@ class FrankaMultiObsEnv_():
                 if np.all(q_vel_avoid == 0):
                     self.data.qvel = q_vel_convergence*self.ee_weight + q_vel_joints[:,i] * self.rotation_joints_weights[i]
 
-                    #error = np.subtract(goal, self.get_ee_position())
-                    #if np.linalg.norm(error) < 0.2:
-                    #   self.data.qvel = q_vel_convergence
+                    error = np.subtract(self.goal, self.get_ee_position())
+                    if np.linalg.norm(error) < 0.2:
+                        #print("velocity", ref_vel, repulsive_vel)
+                        self.data.qvel = q_vel_convergence * 1.5
+                    #self.delta_time = 0.01
                     
                 
-                    # q_ctrl = self.get_ee_qctrl(goal[-1],body_id, ref_vel)
-                    # self.data.ctrl = q_ctrl
+                    #q_ctrl = self.get_ee_qctrl(goal[-1],body_id, ref_vel)
+                    #self.data.ctrl = q_ctrl
                 else:
                     #self.data.qvel = q_vel_avoid * 0.5 + q_vel_convergence*0.25 + q_vel_joints[:,i] * 0.25
-                    self.data.qvel = q_vel_avoid + q_vel_convergence*0.05
+                    self.data.qvel = q_vel_avoid + q_vel_convergence*0.1
                     self.sensors_activation_num += 1
-            
-            ee_end = self.get_ee_position()
-            if np.linalg.norm(ee_end - ee_start) > 0.02:
-                print("robot is unstable")
-                #breakpoint()
+                    #self.delta_time = 0.03
+        
 
             #check limits
             self.check_joint_limits(self.data.qpos)
             mujoco.mj_step(self.model, self.data)
             self.collision_num += self.check_collision()
             
+            ee_end = self.get_ee_position()
+            if np.linalg.norm(ee_end - ee_start) > 0.02:
+                print("robot is unstable")
+                breakpoint()
             #self.trajectory_qpos.append(self.data.qpos.copy())
             self.store_data()
             time_end = self.data.time
@@ -1149,6 +1160,24 @@ class FrankaMultiObsEnv_():
 
         return delta_q
 
+    def compute_self_avoidance_velocity(self, threshold=0.13, scale=0.5):
+        repulsive_velocity = np.zeros(3)
+
+        for body1_name, body2_name in self.self_collision_pairs:
+            id1 = self.model.body(body1_name).id
+            id2 = self.model.body(body2_name).id
+
+            pos1 = self.data.body(id1).xpos
+            pos2 = self.data.body(id2).xpos
+
+            vec = pos1 - pos2
+            dist = np.linalg.norm(vec)
+
+            if dist < threshold and dist > 1e-4:
+                # change the joint angle of joint 4
+                pass
+
+        return repulsive_velocity
 
 
 
@@ -1196,7 +1225,7 @@ class FrankaMultiObsEnv_():
         #print("weights ", weights_sensors_obstacles)
         
         #if any(np.any(arr > 0.8) for arr in weights_sensors_obstacles):
-        if np.any(weights_sensors_obstacles > 0.7): #0.5
+        if np.any(weights_sensors_obstacles > 0.5): #0.5
             index = np.argmax(weights_sensors_obstacles)
             index = index // weights_sensors_obstacles.shape[1]
             obstacle_id = np.argmax(weights_sensors_obstacles[index])
@@ -1479,11 +1508,11 @@ class FrankaMultiObsEnv_():
                 rgba=[0, 1, 0, 1],
                 size= size,
                 pos= position)
-        self.spec.worldbody.add_geom(name= name +'_geom',
-                type=mujoco.mjtGeom.mjGEOM_BOX,
-                rgba=[0, 1, 0, 1],
-                size= [0.0001, 0.0001, 0.0001],
-                pos= position)
+        # self.spec.worldbody.add_geom(name= name +'_geom',
+        #         type=mujoco.mjtGeom.mjGEOM_BOX,
+        #         rgba=[0, 1, 0, 1],
+        #         size= [0.0001, 0.0001, 0.0001],
+        #         pos= position)
         self.model = self.spec.compile()
         self.data = mujoco.MjData(self.model)
         #mujoco.mj_forward(self.model, self.data)

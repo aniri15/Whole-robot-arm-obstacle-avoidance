@@ -261,7 +261,7 @@ class ROAM:
         if self.obstacle:
             # step2 create tree of obstacles
             #human_obs_root_position = np.array([0.4, -0.2, 0.25])
-            cuboid_obs_root_position = np.array([0.5, -0.2, 0.25])
+            cuboid_obs_root_position = np.array([0.5, -0.1, 0.25])
             sphere_1_obs_root_position = np.array([0.3, -3, 0.6]) #0,1,0.6
             sphere_2_obs_root_position = np.array([2, -0.4, 0.6])
             sphere_3_obs_root_position = np.array([0, 1, 0.6])
@@ -335,7 +335,7 @@ class ROAM:
             # reference_dynamics=linearsystem(attractor_position=dynamics.attractor_position),
             create_convergence_dynamics=True,
             convergence_radius=0.55 * math.pi,
-            smooth_continuation_power=0.7) #smooth_continuation_power s is smaller, the reactivity is higher
+            smooth_continuation_power=0.8) #smooth_continuation_power s is smaller, the reactivity is higher
 
     def setup(self, n_grid=5):
         dimension = 3
@@ -417,7 +417,7 @@ class ROAM:
         obstacle.orientation = obstacle.orientation * rotation
 
         amplitude_leg1 = -0.12
-        frequency_leg1 = 0.2
+        #frequency_leg1 = 0.2
         idx = self.human_obstacle_3d.get_obstacle_id_from_name("lowerarm1")
         obstacle = self.human_obstacle_3d[idx]
         rotation = Rotation.from_euler(
@@ -426,7 +426,7 @@ class ROAM:
         obstacle.orientation = obstacle.orientation * rotation
 
         amplitude_leg1 = 0.05
-        frequency_leg1 = 0.2
+        #frequency_leg1 = 0.2
         idx = self.human_obstacle_3d.get_obstacle_id_from_name("upperarm2")
         obstacle = self.human_obstacle_3d[idx]
         rotation = Rotation.from_euler(
@@ -435,7 +435,7 @@ class ROAM:
         obstacle.orientation = rotation * obstacle.orientation
 
         amplitude_leg1 = -0.05
-        frequency_leg1 = 0.2
+        #frequency_leg1 = 0.2
         idx = self.human_obstacle_3d.get_obstacle_id_from_name("lowerarm2")
         obstacle = self.human_obstacle_3d[idx]
         rotation = Rotation.from_euler(
@@ -499,6 +499,7 @@ class ROAM:
 
     def update_step(self, ii: int) -> None:
         # from mayavi import mlab
+        
         velocities = np.zeros((self.n_traj, 3))
         self.weight_ee = []
         for it_traj in range(self.n_traj):
@@ -519,40 +520,42 @@ class ROAM:
         return velocities
     
     def update_ee_step(self, ii: int) -> None:
-        # for i in range(self.n_traj-9, self.n_traj-1):
-        #     #print("i: ", i)
-        #     weights_length = 0
-        #     self.velocities[i] = self.avoider.evaluate_sequence(self.trajectories[:, ii, i])
+        self.avoider.smooth_continuation_power = 1.0
+        for i in range(self.n_traj-9, self.n_traj-1):
+            #print("i: ", i)
+            weights_length = 0
+            self.velocities[i] = self.avoider.evaluate_sequence(self.trajectories[:, ii, i])
 
-        #     if self.obstacle:
-        #         weights_sensor = self.avoider.get_final_weights_for_sensors()
-        #         for num in range(len(self.container)):
-        #             weights_length += len(self.container.get_tree(num))
-        #         weights_length += 1
-        #         #print("weights_length: ", weights_length)
-        #         if len(weights_sensor) == weights_length:
-        #             self.weights_sensors.append(weights_sensor)
-        #         elif len(weights_sensor) != 1 and len(weights_sensor) < weights_length:
-        #             reshaped_weights = np.zeros(weights_length)
-        #             #reshaped_weights[:len(weights_sensor)] = weights_sensor
-        #             reshaped_weights[weights_length-len(weights_sensor):] = weights_sensor
-        #             self.weights_sensors.append(reshaped_weights)
-        #         else:
-        #             reshaped_weights = np.zeros(weights_length)
-        #             reshaped_weights[:len(weights_sensor)] = weights_sensor
-        #             self.weights_sensors.append(reshaped_weights)
-        #     else:
-        #         self.weights_sensors.append(np.zeros(1))
+            if self.obstacle:
+                weights_sensor = self.avoider.get_final_weights_for_sensors()
+                for num in range(len(self.container)):
+                    weights_length += len(self.container.get_tree(num))
+                weights_length += 1
+                #print("weights_length: ", weights_length)
+                if len(weights_sensor) == weights_length:
+                    self.weights_sensors.append(weights_sensor)
+                elif len(weights_sensor) != 1 and len(weights_sensor) < weights_length:
+                    reshaped_weights = np.zeros(weights_length)
+                    #reshaped_weights[:len(weights_sensor)] = weights_sensor
+                    reshaped_weights[weights_length-len(weights_sensor):] = weights_sensor
+                    self.weights_sensors.append(reshaped_weights)
+                else:
+                    reshaped_weights = np.zeros(weights_length)
+                    reshaped_weights[:len(weights_sensor)] = weights_sensor
+                    self.weights_sensors.append(reshaped_weights)
+            else:
+                self.weights_sensors.append(np.zeros(1))
         
         self.velocities[-1] = self.avoider.evaluate_sequence(self.trajectories[:, ii, -1])
     
     def update_norm_dir(self,ii:int):
         #velocities = np.zeros((self.n_traj, 3))
+        self.avoider.smooth_continuation_power = 0.7
         self.velocities = np.zeros((self.n_traj, 3))
         self.weights_sensors = []
     
-        #for it_traj in range(self.n_traj-9):
-        for it_traj in range(self.n_traj-1):
+        for it_traj in range(self.n_traj-9):
+        #for it_traj in range(self.n_traj-1):
             weights_length = 0
             #print("it_traj: ", it_traj)
             self.velocities[it_traj] = self.avoider.evaluate_sequence_norm(self.trajectories[:, ii, it_traj])

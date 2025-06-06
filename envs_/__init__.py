@@ -4,3 +4,4 @@ from .franka_human_env_ee_joints_sensors import End_Effector_Joints_Sensors_Env_
 from .franka_human_env_ee_rrmc import End_Effector_RRMC_Env_
 from .franka_human_env_ee import End_Effector_Env_
 from .franka_multi_obs_env_ import FrankaMultiObsEnv_
+from .franka_less_sensors_env_ import FrankaLessSensorsEnv_
