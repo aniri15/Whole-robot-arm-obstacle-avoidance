@@ -21,20 +21,15 @@ global rot_ctrl
 folder_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 scene_path = folder_path + "/envs_/franka_emika_panda/scene2.xml"
 print("scene_path: ", scene_path)
-#scene_path = "/home/aniri/nonlinear_obstacle_avoidance/franka_gym_test/envs2/franka_emika_panda/scene2.xml"
-# good example
-# goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] good comparision
-# goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] unreachable for norm dir
-goal = np.array([ 0.52557378, 0.53178297, 0.4])
-#goal = np.array([0.4, 0.2, 0.5]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
-#goal = np.array([0.67735902, 0.27006253, 0.22115411]) #0.67735902, 0.27006253, 0.22115411
+goal = np.array([0.32557378, 0.43178297, 0.44178945])
 dynamic_human = True
 obstacle = True
+
 env = FrankaMultiObsEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
 if env.check_collision():
     print("collision")
     breakpoint()
-env_name = "human" # "table_box" or "complex_table" or "human_table" or "cuboid_sphere" or "table"
+env_name = "human_table" # "table_box" or "complex_table" or "human_table" or "cuboid_sphere" or "table"
 if obstacle == True:
     start_positions = env.get_joints_sensors_end_position()
     print("end_effector_position: ", env.get_ee_position())

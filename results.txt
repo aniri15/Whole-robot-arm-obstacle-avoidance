@@ -700,27 +700,13 @@ collision number: 70
 reach_goal: [True]
 time per step: 0.39977732624553
 -------------------------------------
-goal range x : 0.2 0.2
-goal range y: -0.4 -0.2
-goal range z: 0.4 0.3
+goal start + range x: 0.2 + 0.2
+goal start + range y: -0.4 + -0.2
+goal start + range z: 0.4 + 0.3
 total number of reach goal: 87
 total number of no collision: 60
 total number of success scene: 52
 ----------------------------------------------100 goal-----------------------------------------------
-ith 0 goal: [0.3006619  0.57225059 0.46886015]
-scene: cuboid_sphere
-dynamic: True
-collision number: 69
-reach_goal: [True]
-time per step: 0.42321999925766546
--------------------------------------
-ith 1 goal: [0.40665812 0.40454309 0.49805436]
-scene: cuboid_sphere
-dynamic: True
-collision number: 0
-reach_goal: [True]
-time per step: 0.4340452488432539
--------------------------------------
 ith 0 goal: [0.36408443 0.58363216 0.55629328]
 scene: human_table
 dynamic: True
@@ -868,12 +854,12 @@ collision number: 0
 reach_goal: [True]
 time per step: 0.9547365920334917
 -------------------------------------
-ith 21 goal: [0.32557378 0.33178297 0.44178945]
+ith 21 goal: [0.32557378 0.43178297 0.44178945]
 scene: human_table
 dynamic: True
-collision number: 126
+collision number: 0
 reach_goal: [True]
-time per step: 0.876581537565996
+time per step: 1.0381245060777111
 -------------------------------------
 ith 22 goal: [0.54852771 0.41083392 0.52062548]
 scene: human_table
@@ -1421,10 +1407,10 @@ collision number: 0
 reach_goal: [True]
 time per step: 0.8476087631323399
 -------------------------------------
-goal range x : 0.3 0.3
-goal range y: 0.3 0.3
-goal range z: 0.4 0.2
+goal start + range x: 0.3 + 0.3
+goal start + range y: 0.3 + 0.3
+goal start + range z: 0.4 + 0.2
 total number of reach goal: 100
-total number of no collision: 99
-total number of success scene: 99
+total number of no collision: 100
+total number of success scene: 100
 ---------------------------------------------------------------------------------------------

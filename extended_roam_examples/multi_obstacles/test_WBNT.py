@@ -26,8 +26,8 @@ print("scene_path: ", scene_path)
 # good example
 # goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] good comparision
 # goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] unreachable for norm dir
-goal = np.array([0.3, 0.2, 0.3])
-goal = np.array([0.4, 0.4, 0.5]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
+# goal = np.array([0.3, 0.2, 0.3])
+# goal = np.array([0.4, 0.4, 0.5]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
 dynamic_human = True
 obstacle = True
 it_max = 100
@@ -41,12 +41,12 @@ scene_no_collision = 0
 success_scene = 0
 
 while it < it_max:
-    # randomize the goal in range of [0.3, 0.3, 0.4] to [0.6, 0.6, 0.6]
+    # randomize the goal in a range
     print("scenes number: ", it)
     start_x = 0.2
     range_x = 0.2
-    start_y = -0.4
-    range_y = -0.2
+    start_y = 0.2
+    range_y = 0.2
     start_z = 0.4
     range_z = 0.2
     goal = np.zeros(3)
@@ -59,7 +59,7 @@ while it < it_max:
     #env = FrankaHumanEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
     env = FrankaMultiObsEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
 
-    env_name = "cuboid_sphere" # "table_box" or "complex_table" or "human_table" or "cuboid_sphere" or "table"
+    env_name = "cuboid_sphere" # "human" or "complex_table" or "human_table" or "cuboid_sphere" or "table"
     if obstacle == True:
         start_positions = env.get_joints_sensors_end_position()
         #start_positions = env.get_joints_end_position()
@@ -108,9 +108,9 @@ while it < it_max:
     it += 1
     #print("velocity average: ", np.mean(env.vel_storage, axis=0))
     #env.replay()
-f.write("goal range x : " + str(start_x) + " " + str(range_x) + "\n")
-f.write("goal range y: " + str(start_y) + " " + str(range_y) + "\n")
-f.write("goal range z: " + str(start_z) + " " + str(range_z) + "\n")
+f.write("goal start + range x: " + str(start_x) + " + " + str(range_x) + "\n")
+f.write("goal start + range y: " + str(start_y) + " + " + str(range_y) + "\n")
+f.write("goal start + range z: " + str(start_z) + " + " + str(range_z) + "\n")
 f.write("total number of reach goal: " + str(reach_num) + "\n")
 f.write("total number of no collision: " + str(scene_no_collision) + "\n")
 f.write("total number of success scene: " + str(success_scene) + "\n")
