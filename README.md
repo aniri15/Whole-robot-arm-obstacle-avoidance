@@ -54,14 +54,14 @@ Make sure the `envs_` module and MuJoCo are correctly installed and configured.
 ###  Run Simulation
 ```bash
 cd Whole-robot-arm-obstacle-avoidance/
-python whole_robot_arm_multi_obstacles_avoidance/extended_roam_examples/multi_obstacles/whole_body_franka_multi_obstacles.py
+python whole_robot_arm_multi_obstacles_avoidance/wbnt_examples/multi_obstacles/whole_body_franka_multi_obstacles.py
 ```
 
 
 ### Run Multi-goals Evaluation
 ```bash
 cd Whole-robot-arm-obstacle-avoidance/
-python whole_robot_arm_multi_obstacles_avoidance/extended_roam_examples/multi_obstacles/test_WBNT.py
+python whole_robot_arm_multi_obstacles_avoidance/wbnt_examples/multi_obstacles/test_WBNT.py
 ```
 
 ###  Options
