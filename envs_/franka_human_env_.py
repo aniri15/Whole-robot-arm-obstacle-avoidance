@@ -17,7 +17,7 @@ from scipy.spatial.transform import Rotation as R
 import time
 from itertools import accumulate
 from loop_rate_limiters import RateLimiter
-import mink
+#import mink
 
 DEFAULT_CAMERA_CONFIG = {
     "distance": 1.4,

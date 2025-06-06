@@ -13,9 +13,11 @@ nonlinear_avoidance/geometry.py
 nonlinear_avoidance/gmm_obstacle.py
 nonlinear_avoidance/graph_handler.py
 nonlinear_avoidance/hierarchy_obstacle_protocol.py
+nonlinear_avoidance/multi_body_franka_obs.py
 nonlinear_avoidance/multi_body_human.py
 nonlinear_avoidance/multi_ellipse_obstacle.py
 nonlinear_avoidance/multi_hull_and_obstacle.py
+nonlinear_avoidance/multi_obs_env.py
 nonlinear_avoidance/multi_obstacle.py
 nonlinear_avoidance/multi_obstacle_avoider.py
 nonlinear_avoidance/multi_obstacle_container.py
@@ -42,6 +44,7 @@ tests/test_circular_line_following.py
 tests/test_convergence_directions.py
 tests/test_convergence_weights.py
 tests/test_deviation_dynamics.py
+tests/test_franka_env.py
 tests/test_general_rotation.py
 tests/test_gmm_enclosing_learned_boundary.py
 tests/test_gmm_obstacles.py

@@ -22,12 +22,7 @@ global rot_ctrl
 folder_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 scene_path = folder_path + "/envs_/franka_emika_panda/scene2.xml"
 print("scene_path: ", scene_path)
-#scene_path = "/home/aniri/nonlinear_obstacle_avoidance/franka_gym_test/envs2/franka_emika_panda/scene2.xml"
-# good example
-# goal = np.array([0.4, 0.2, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] good comparision
-# goal = np.array([0.4, 0.3, 0.5]) with the obstacle root position be [0.4, -0,2, 0.25] unreachable for norm dir
-# goal = np.array([0.3, 0.2, 0.3])
-# goal = np.array([0.4, 0.4, 0.5]) # np.array([0.4,0.4,0.5]) with the obstacle root position be [0.4, -0,2, 0.25] with the obstacle moving achievable, without the obstacle moving unreachable???
+
 dynamic_human = True
 obstacle = True
 it_max = 100
@@ -56,28 +51,24 @@ while it < it_max:
     goal[0] = x
     goal[1] = y
     goal[2] = z
-    #env = FrankaHumanEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
+    
     env = FrankaMultiObsEnv_(scene_path,dynamic_human=dynamic_human, goal=goal, obstacle = obstacle)
 
     env_name = "cuboid_sphere" # "human" or "complex_table" or "human_table" or "cuboid_sphere" or "table"
     if obstacle == True:
         start_positions = env.get_joints_sensors_end_position()
-        #start_positions = env.get_joints_end_position()
+       
         print("end_effector_position: ", env.get_ee_position())
         print("goal: ", goal)
         env.move_franka_robot_sensors_norm_dir(start_positions, goal, env_name)
-        #env.move_franka_robot_norm_dir(start_positions, goal, env_name)
+        
     elif obstacle == False:
         start_positions = env.get_joints_end_position()
         print("end_effector_position: ", env.get_ee_position())
         print("goal: ", goal)
         env.move_franka_robot_norm_dir(start_positions, goal)
 
-    # start_positions = env.get_joints_end_position()
-    # print("end_effector_position: ", env.get_ee_position())
-    # print("goal: ", goal)
-    # env.move_franka_robot_norm_dir(start_positions, goal)
-
+    
     print("singular config number", env.singularities_number)
     print('------------------------------------')
     print("start replay")
@@ -106,8 +97,7 @@ while it < it_max:
     f.write("time per step: " + str(np.mean(env.time_storage)) + "\n")
     f.write("-------------------------------------" + "\n")
     it += 1
-    #print("velocity average: ", np.mean(env.vel_storage, axis=0))
-    #env.replay()
+
 f.write("goal start + range x: " + str(start_x) + " + " + str(range_x) + "\n")
 f.write("goal start + range y: " + str(start_y) + " + " + str(range_y) + "\n")
 f.write("goal start + range z: " + str(start_z) + " + " + str(range_z) + "\n")

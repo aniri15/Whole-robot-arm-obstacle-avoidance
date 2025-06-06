@@ -5,7 +5,17 @@ shapely
 # Currently needed for all the plotting and visualization packages
 matplotlib
 pyqt5 # Allow animation and visualization
+mujoco==3.2.7 # For physics simulation
+gymnasium==0.27.1
+gymnasium-notices==0.0.1
+gymnasium-robotics==1.2.0
+mediapy
+filterpy
+loop_rate_limiters
+pynput
+opencv-python
 
+ 
 # Graphs [for now use both]
 networkx    # more versatile
 # igraph      # faster

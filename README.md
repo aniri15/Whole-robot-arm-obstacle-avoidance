@@ -33,27 +33,45 @@ pip install -e .
 ```
 
 ### 4. Install Required Submodules
+To avoid missing submodules or broken links when installing directly via pip, we recommend cloning the repositories locally and installing them with editable mode:
 ```bash
-pip install "git+https://github.com/hubernikus/various_tools.git"
-pip install "git+https://github.com/hubernikus/dynamic_obstacle_avoidance.git"
-```
+git clone https://github.com/hubernikus/various_tools.git
+git clone https://github.com/hubernikus/dynamic_obstacle_avoidance.git
 
+pip install -e ./various_tools
+pip install -e ./dynamic_obstacle_avoidance
+
+```
 ---
 
-##  Run the Demo Simulation
+##▶️  Run the Demo Simulation
 
 This project provides a simulation in MuJoCo for the Franka Emika Panda robot with different multi-obstacle scenarios.
 
 ###  Prerequisites
 Make sure the `envs_` module and MuJoCo are correctly installed and configured.
 
-### ▶️ Run Simulation
+###  Run Simulation
 ```bash
+cd Whole-robot-arm-obstacle-avoidance/
 python whole_robot_arm_multi_obstacles_avoidance/extended_roam_examples/multi_obstacles/whole_body_franka_multi_obstacles.py
 ```
 
+
+### Run Multi-goals Evaluation
+```bash
+cd Whole-robot-arm-obstacle-avoidance/
+python whole_robot_arm_multi_obstacles_avoidance/extended_roam_examples/multi_obstacles/test_WBNT.py
+```
+
 ###  Options
+Set options for running demo simulation as following:
 - `goal`: 3D target position of the end-effector
+- `dynamic_human`: whether human-shaped obstacles are dynamic (`True/False`)
+- `env_name`: choose from `{table_box, human_table, cuboid_sphere, complex_table}`
+
+Set options for running multi-goals evaluation as following:
+- sample range: for example as `start_x = 0.2, range_x = 0.2, start_y = 0.2, range_y = 0.2, start_z = 0.4, range_z = 0.2`
 - `dynamic_human`: whether human-shaped obstacles are dynamic (`True/False`)
 - `env_name`: choose from `{table_box, human_table, cuboid_sphere, complex_table}`
 
@@ -98,16 +116,14 @@ We sincerely thank the developers and contributors of the many open-source proje
 
 ## Citation
 
-For related work:
-```bibtex
-@phdthesis{huber2024exact,
-  title={Exact Obstacle Avoidance for Robots in Complex and Dynamic Environments Using Local Modulation},
-  author={Huber, Lukas},
-  year={2024},
-  address={Lausanne, Switzerland},
-  school={EPFL},
-  type={PhD thesis}
+If you use this project, please cite:
+```@mastersthesis{aniri2025wbnt,
+  title={Whole-Body Obstacle Avoidance via Rotational Dynamics Along Normal and Tangent Directions},
+  author={Aniri},
+  school={Technical University of Munich},
+  year={2025}
 }
+
 ```
 
 ---

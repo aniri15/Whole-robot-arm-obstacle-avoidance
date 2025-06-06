@@ -16,7 +16,7 @@ from dynamic_obstacle_avoidance.obstacles import HyperSphere
 from scipy.spatial.transform import Rotation as R
 import time
 from itertools import accumulate
-import mink
+#import mink
 
 DEFAULT_CAMERA_CONFIG = {
     "distance": 1.4,
