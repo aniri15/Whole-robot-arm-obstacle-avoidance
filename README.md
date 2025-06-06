@@ -73,7 +73,7 @@ Set options for running demo simulation as following:
 Set options for running multi-goals evaluation as following:
 - sample range: for example as `start_x = 0.2, range_x = 0.2, start_y = 0.2, range_y = 0.2, start_z = 0.4, range_z = 0.2`
 - `dynamic_human`: whether human-shaped obstacles are dynamic (`True/False`)
-- `env_name`: choose from `{table_box, human_table, cuboid_sphere, complex_table}`
+- `env_name`: choose from `{table, human, human_table, cuboid_sphere}`
 
 
 ###  Output Metrics
