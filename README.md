@@ -44,7 +44,7 @@ pip install -e ./dynamic_obstacle_avoidance
 ```
 ---
 
-##▶️  Run the Demo Simulation
+## ▶️  Run the Demo Simulation
 
 This project provides a simulation in MuJoCo for the Franka Emika Panda robot with different multi-obstacle scenarios.
 
