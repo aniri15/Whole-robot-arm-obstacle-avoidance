@@ -135,4 +135,4 @@ For any questions or collaborations, feel free to reach out to:
 
 **Aniri**  
 Master's Thesis, TUM Informatics  
-Email: *anirigermany@gmail.com]*
+Email: *aniri.aniri15@outlook.com*
